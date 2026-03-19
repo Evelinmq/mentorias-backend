@@ -5,7 +5,7 @@ import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
-import mx.edu.utez.mentorias.models.role.BeanMentor;
+import mx.edu.utez.mentorias.models.roles.BeanMentor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

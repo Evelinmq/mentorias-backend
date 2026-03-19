@@ -1,20 +1,20 @@
-package mx.edu.utez.mentorias.models.role;
+package mx.edu.utez.mentorias.models.roles;
 
 import jakarta.persistence.*;
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
-import mx.edu.utez.mentorias.models.user.BeanUser;
+import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 
 import java.util.List;
 
 @Entity
-@Table(name = "mentors")
+@Table(name = "mentores")
 public class BeanMentor {
     @Id
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private BeanUser user;
+    @JoinColumn(name = "usuario_id")
+    private BeanUsuario usuario;
 
     @OneToMany(mappedBy = "mentor")
     private List<BeanMentoria> mentorias;
