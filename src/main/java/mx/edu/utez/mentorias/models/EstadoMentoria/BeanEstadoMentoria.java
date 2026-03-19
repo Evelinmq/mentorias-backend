@@ -14,6 +14,4 @@ public class BeanEstadoMentoria {
     private Long id;
     private String nombre;
 
-    @OneToMany(mappedBy = "estado")
-    private List<BeanMentoria> mentorias;
 }

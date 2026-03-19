@@ -14,6 +14,4 @@ public class BeanMateria {
     private Long id;
     private String nombre;
 
-    @OneToMany(mappedBy = "materia")
-    private List<BeanMateriaCarrera> materiaInCarrera;
 }

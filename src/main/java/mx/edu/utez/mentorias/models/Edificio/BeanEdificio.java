@@ -16,6 +16,6 @@ public class BeanEdificio {
 
     private String nombre;
 
-    @OneToMany
+    @OneToMany(mappedBy = "edificio")
     private List<BeanEspacio> Espacios;
 }
