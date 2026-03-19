@@ -1,15 +1,22 @@
 package mx.edu.utez.mentorias.models.Mentoria;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.role.BeanMentor;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Table(name = "mentoria")
@@ -24,19 +31,19 @@ public class BeanMentoria {
     private Integer cupo;
 
     @ManyToOne
-    @JoinColumn(name = "Espacio")
+    @JoinColumn(name = "espacio_id")
     private BeanEspacio espacio;
 
     @ManyToOne
-    @JoinColumn(name = "Estado")
+    @JoinColumn(name = "estado_id")
     private BeanEstadoMentoria estado;
 
     @ManyToOne
-    @JoinColumn(name = "Mentor")
+    @JoinColumn(name = "mentor_id")
     private BeanMentor mentor;
 
     @ManyToOne
-    @JoinColumn(name = "Materia")
+    @JoinColumn(name = "materia_id")
     private BeanMateria materia;
 
 
