@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.models.MateriaCarrera;
+package mx.edu.utez.mentorias.models.UsuarioRol;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,21 +7,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
-import mx.edu.utez.mentorias.models.Materia.BeanMateria;
+import mx.edu.utez.mentorias.models.Rol.BeanRol;
+import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 
 @Entity
-@Table(name = "Materia_Carrera")
-public class BeanMateriaCarrera {
+@Table(name="usuario_rol")
+public class BeanUsuarioRol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "materia_id")
-    private BeanMateria materia;
+    @JoinColumn(name = "usuario_id")
+    private BeanUsuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "carrera_id")
-    private BeanCarrera carrera;
+    @JoinColumn(name = "rol_id")
+    private BeanRol rol;
+
 }

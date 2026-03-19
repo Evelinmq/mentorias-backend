@@ -16,7 +16,7 @@ import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
-import mx.edu.utez.mentorias.models.roles.BeanMentor;
+import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 @Entity
 @Table(name = "mentoria")
 public class BeanMentoria {
@@ -39,7 +39,7 @@ public class BeanMentoria {
 
     @ManyToOne
     @JoinColumn(name = "mentor_id")
-    private BeanMentor mentor;
+    private BeanUsuario mentor;
 
     @ManyToOne
     @JoinColumn(name = "materia_id")
