@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import mx.edu.utez.mentorias.models.user.BeanUser;
 
 @Entity
-@Table(name = "mentors")
-public class BeanMentor {
+@Table(name = "learners")
+public class BeanLearner {
     @Id
     private Long id;
 
