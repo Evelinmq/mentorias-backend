@@ -17,7 +17,6 @@ import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.roles.BeanMentor;
-
 @Entity
 @Table(name = "mentoria")
 public class BeanMentoria {
