@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.models.usuario;
+package mx.edu.utez.mentorias.models.EstadoUsuario;
 
 import jakarta.persistence.*;
 

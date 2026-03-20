@@ -1,6 +1,7 @@
 package mx.edu.utez.mentorias.models.usuario;
 
 import jakarta.persistence.*;
+import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 
 @Entity
 @Table(name = "usuarios")
