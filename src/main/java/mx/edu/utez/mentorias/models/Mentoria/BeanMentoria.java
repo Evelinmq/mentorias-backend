@@ -12,11 +12,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "mentoria")
 public class BeanMentoria {

@@ -1,8 +1,16 @@
 package mx.edu.utez.mentorias.models.usuario;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "usuarios")
 public class BeanUsuario {
