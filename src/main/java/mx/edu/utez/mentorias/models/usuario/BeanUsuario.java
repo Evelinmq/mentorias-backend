@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 
 @Getter
@@ -32,4 +33,10 @@ public class BeanUsuario {
     @ManyToOne
     @JoinColumn(name = "estado_usuario_id")
     private BeanEstadoUsuario estado;
+
+    @ManyToOne
+    @JoinColumn(name = "carrera_usuario")
+    private BeanCarrera carrera;
+
+
 }

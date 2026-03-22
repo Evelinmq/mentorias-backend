@@ -1,5 +1,7 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.contollers.user;
 
+import mx.edu.utez.mentorias.contollers.user.dto.GetMentorByNameDTO;
+import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.services.Usuario.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -19,12 +21,12 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BeanUsuario>> listar() {
+    public ResponseEntity<List<UserForClientDTO>> listar() {
         return ResponseEntity.ok(usuarioService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BeanUsuario> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<UserForClientDTO> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.buscarPorId(id));
     }
 
@@ -42,5 +44,12 @@ public class UsuarioController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         usuarioService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/nombre")
+    public UserForClientDTO getUserByNombre(
+            @RequestBody GetMentorByNameDTO getByNameDTO
+            ){
+        return usuarioService.getMentorByName(getByNameDTO);
     }
 }
