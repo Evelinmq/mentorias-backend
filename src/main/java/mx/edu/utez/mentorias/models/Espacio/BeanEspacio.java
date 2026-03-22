@@ -1,5 +1,6 @@
 package mx.edu.utez.mentorias.models.Espacio;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class BeanEspacio {
     private Long id;
     private String nombre;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn (name = "edificio_id")
     private BeanEdificio edificio;
