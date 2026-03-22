@@ -1,5 +1,6 @@
 package mx.edu.utez.mentorias.models.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class BeanUsuario {
     private String nombre;
     private String apellidos;
     private String correo;
+    @JsonIgnore
     private String contrasena;
 
     @Lob
