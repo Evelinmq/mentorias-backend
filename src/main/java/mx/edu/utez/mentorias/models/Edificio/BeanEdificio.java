@@ -27,5 +27,5 @@ public class BeanEdificio {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "edificio")
-    private List<BeanEspacio> Espacios;
+    private List<BeanEspacio> espacios;
 }
