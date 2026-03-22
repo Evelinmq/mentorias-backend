@@ -27,18 +27,14 @@ public class CarreraController {
     @PostMapping
     public ResponseEntity<BeanCarrera> agregar(@RequestBody BeanCarrera carrera) {
         BeanCarrera nuevaCarrera = carreraService.crearCarrera(carrera);
-        return new ResponseEntity<>(nuevaCarrera, HttpStatus.CREATED);
+        return ResponseEntity.ok(carrera);
     }
 
     // EDITAR
     @PutMapping("/{id}")
     public ResponseEntity<BeanCarrera> editar(@PathVariable Long id, @RequestBody BeanCarrera carrera) {
-        try {
-            BeanCarrera actualizada = carreraService.actualizar(id, carrera);
-            return ResponseEntity.ok(actualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        BeanCarrera actualizada = carreraService.actualizar(id, carrera);
+        return ResponseEntity.ok(carrera);
     }
 
 }
