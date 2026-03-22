@@ -1,6 +1,7 @@
 package mx.edu.utez.mentorias.models.Edificio;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class BeanEdificio {
 
     private String nombre;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "edificio")
     private List<BeanEspacio> Espacios;
 }
