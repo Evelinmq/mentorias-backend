@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MentoriaUsuarioRepository extends JpaRepository<BeanMentoriaUsuario, Long> {
+    //Cuenta registros para una mentoría
+    long countByMentoriaId(Long mentoriaId);
 }

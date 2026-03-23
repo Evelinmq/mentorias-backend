@@ -1,6 +1,7 @@
 package mx.edu.utez.mentorias.models.Tema;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,5 +29,6 @@ public class BeanTema {
 
     @ManyToOne
     @JoinColumn(name = "mentoria_id")
+    @JsonBackReference
     private BeanMentoria mentoria;
 }
