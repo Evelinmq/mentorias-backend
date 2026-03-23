@@ -3,6 +3,7 @@ package mx.edu.utez.mentorias.services.UsuarioRol;
 import mx.edu.utez.mentorias.models.UsuarioRol.BeanUsuarioRol;
 import mx.edu.utez.mentorias.models.UsuarioRol.UsuarioRolRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ public class UsuarioRolService {
     }
 
     // Listar todas las asignaciones
+    @Transactional(readOnly = true)
     public List<BeanUsuarioRol> listarTodas() {
         return usuarioRolRepository.findAll();
     }
 
     // ASIGNAR ROL A USUARIO
+    @Transactional(rollbackFor = Exception.class)
     public BeanUsuarioRol guardar(BeanUsuarioRol usuarioRol) {
         return usuarioRolRepository.save(usuarioRol);
     }

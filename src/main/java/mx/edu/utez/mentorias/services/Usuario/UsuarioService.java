@@ -64,6 +64,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public BeanUsuario actualizar(Long id, BeanUsuario datosNuevos) {
         return usuarioRepository.findById(id).map(usuario -> {
             usuario.setNombre(datosNuevos.getNombre());

@@ -3,6 +3,7 @@ package mx.edu.utez.mentorias.services.Materia;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.Materia.MateriaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,19 +16,23 @@ public class MateriaService {
         this.materiaRepository = materiaRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<BeanMateria> listarTodas() {
         return materiaRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public BeanMateria buscarPorId(Long id) {
         return materiaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Materia no encontrada con ID: " + id));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public BeanMateria guardar(BeanMateria materia) {
         return materiaRepository.save(materia);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public BeanMateria actualizar(Long id, BeanMateria materiaActualizada) {
         return materiaRepository.findById(id).map(materia -> {
             materia.setNombre(materiaActualizada.getNombre());

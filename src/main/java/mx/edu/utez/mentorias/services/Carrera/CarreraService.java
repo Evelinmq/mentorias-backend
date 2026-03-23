@@ -3,6 +3,7 @@ package mx.edu.utez.mentorias.services.Carrera;
 import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
 import mx.edu.utez.mentorias.models.Carrera.CarreraRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,14 +16,17 @@ public class CarreraService {
         this.carreraRepository = carreraRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<BeanCarrera> obtenerTodas() {
         return carreraRepository.findAll();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public BeanCarrera crearCarrera(BeanCarrera carrera) {
         return carreraRepository.save(carrera);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public BeanCarrera actualizar(Long id, BeanCarrera datosActualizados) {
         return carreraRepository.findById(id).map(carrera -> {
             carrera.setNombre(datosActualizados.getNombre());
