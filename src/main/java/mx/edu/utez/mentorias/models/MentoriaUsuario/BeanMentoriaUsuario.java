@@ -33,5 +33,4 @@ public class BeanMentoriaUsuario {
     @JoinColumn(name = "mentoria_id")
     private BeanMentoria mentoria;
 
-    private String rolDentro;
 }
