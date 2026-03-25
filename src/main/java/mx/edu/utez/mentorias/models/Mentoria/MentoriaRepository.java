@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface MentoriaRepository extends JpaRepository<BeanMentoria, Long> {
 
+    //Cupo
+    List<BeanMentoria> findAllByCupoLessThan(int limite);
+
     // Rango de fechas
     List<BeanMentoria> findByFechaBetween(LocalDate inicio, LocalDate fin);
 

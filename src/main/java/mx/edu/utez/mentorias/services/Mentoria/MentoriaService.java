@@ -76,4 +76,8 @@ public class MentoriaService {
         return mentoriaRepository.filtrarDinamico(inicio, fin, materiaId, mentorId);
     }
 
+    public List<BeanMentoria> listarDisponibles() {
+        return mentoriaRepository.findAllByCupoLessThan(5);
+    }
+
 }
