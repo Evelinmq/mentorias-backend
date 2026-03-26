@@ -1,6 +1,7 @@
 package mx.edu.utez.mentorias.models.Carrera;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 @Table(name = "carrera")
 public class BeanCarrera {
     @Id
@@ -23,7 +25,9 @@ public class BeanCarrera {
     private Long id;
     private String nombre;
 
+
     @OneToMany(mappedBy = "carrera")
+    @JsonIgnore
     private List<BeanMateriaCarrera> materiasAsignadas;
 
 
