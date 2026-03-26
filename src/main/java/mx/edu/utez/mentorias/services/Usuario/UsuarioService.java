@@ -4,6 +4,7 @@ import mx.edu.utez.mentorias.contollers.user.dto.CreateUserDTO;
 import mx.edu.utez.mentorias.contollers.user.dto.GetMentorByNameDTO;
 import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import mx.edu.utez.mentorias.mappers.UserMapper;
+import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -50,9 +51,6 @@ public class UsuarioService {
     }
 
     public Object createUser(CreateUserDTO payload) {
-        // Validaciones para crear un usuario
-
-        // Mapear los datos del dto de creación a una entidad usuario que podamos registrar
         BeanUsuario newUser = userMapper.createUserToBean(payload);
 
         return usuarioRepository.saveAndFlush(newUser);
@@ -60,23 +58,37 @@ public class UsuarioService {
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario guardar(BeanUsuario usuario) {
-        // Después aplicar el hashing o encriptación
+
+        if (usuario.getEstado() == null) {
+            BeanEstadoUsuario estado = new BeanEstadoUsuario();
+            estado.setId(1L);
+            usuario.setEstado(estado);
+        }
+
         return usuarioRepository.save(usuario);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario actualizar(Long id, BeanUsuario datosNuevos) {
         return usuarioRepository.findById(id).map(usuario -> {
+
             usuario.setNombre(datosNuevos.getNombre());
             usuario.setApellidos(datosNuevos.getApellidos());
             usuario.setCorreo(datosNuevos.getCorreo());
-            // Solo actualizamos la foto si se requiere
+            if (datosNuevos.getEstado() != null) {
+                usuario.setEstado(datosNuevos.getEstado());
+            }
+            if (datosNuevos.getCarrera() != null) {
+                usuario.setCarrera(datosNuevos.getCarrera());
+            }
+
             if (datosNuevos.getFoto() != null) {
                 usuario.setFoto(datosNuevos.getFoto());
             }
-            usuario.setEstado(datosNuevos.getEstado());
+
             return usuarioRepository.save(usuario);
-        }).orElseThrow(() -> new RuntimeException("No se encontró el usuario para actualizar"));
+
+        }).orElseThrow(() -> new RuntimeException("No se encontró el usuario"));
     }
 
     public void eliminar(Long id) {
