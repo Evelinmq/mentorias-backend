@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,10 +34,15 @@ public class SecurityConfig {
                             response.setContentType("application/json");
                             response.setCharacterEncoding("UTF-8");
 
+                            // SE SACA EL CORREO
                             String correo = authentication.getName();
 
-                            String rolReal = "admin"; // <---- CAMBIAR PARA PROBAR
+                            String rolReal = authentication.getAuthorities().stream()
+                                    .findFirst()
+                                    .map(GrantedAuthority::getAuthority)
+                                    .orElse("aprendiz");
 
+                            // CREACION DEL JSON
                             String jsonResponse = String.format("{\"correo\": \"%s\", \"rol\": \"%s\"}", correo, rolReal);
 
                             response.getWriter().write(jsonResponse);
