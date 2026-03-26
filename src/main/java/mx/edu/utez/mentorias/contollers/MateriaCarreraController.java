@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/materia-carrera")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MateriaCarreraController {
 
     private final MateriaCarreraService materiaCarreraService;
