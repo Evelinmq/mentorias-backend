@@ -6,7 +6,6 @@ import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +17,13 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
-            UserMapper userMapper,
-            PasswordEncoder passwordEncoder
+            UserMapper userMapper
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +60,7 @@ public class UsuarioService {
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario guardar(BeanUsuario usuario) {
         // Después aplicar el hashing o encriptación
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        usuario.setContrasena(usuario.getContrasena());
         return usuarioRepository.save(usuario);
     }
 

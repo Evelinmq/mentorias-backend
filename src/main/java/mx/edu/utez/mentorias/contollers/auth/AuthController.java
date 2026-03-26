@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin({"*"})
 public class AuthController {
 
     private final UsuarioService usuarioService;
@@ -17,14 +17,11 @@ public class AuthController {
         this.usuarioService = usuarioService;
     }
 
-    /*
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        LoginResponseDTO response = usuarioService.login(loginDTO);
-        if (response == null) {
-            return ResponseEntity.status(401).body("Credenciales incorrectas");
-        }
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok("");
     }
-    */
+
 }
