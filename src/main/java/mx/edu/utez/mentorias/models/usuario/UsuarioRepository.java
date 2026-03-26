@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
@@ -16,8 +17,8 @@ public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
             "ON u.id = ur.usuarioID" +
             "WHERE NOMBRE = :nombre" +
             "AND ur.rolId = 'Mentor'")
-    BeanUsuario findMentorByNombre(@Param
-                                            ("nombre") String nombre
-    );
+    BeanUsuario findMentorByNombre(@Param("nombre") String nombre);
+    Optional<BeanUsuario> findByCorreo(String correo);
+
 
 }

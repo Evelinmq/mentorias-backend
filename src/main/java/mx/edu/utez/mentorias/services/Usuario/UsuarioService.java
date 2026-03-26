@@ -4,9 +4,9 @@ import mx.edu.utez.mentorias.contollers.user.dto.CreateUserDTO;
 import mx.edu.utez.mentorias.contollers.user.dto.GetMentorByNameDTO;
 import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import mx.edu.utez.mentorias.mappers.UserMapper;
-import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +16,18 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
-
-    private UserMapper userMapper;
+    private final UsuarioRepository usuarioRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
-            UserMapper userMapper
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -51,6 +53,9 @@ public class UsuarioService {
     }
 
     public Object createUser(CreateUserDTO payload) {
+        // Validaciones para crear un usuario
+
+        // Mapear los datos del dto de creación a una entidad usuario que podamos registrar
         BeanUsuario newUser = userMapper.createUserToBean(payload);
 
         return usuarioRepository.saveAndFlush(newUser);
@@ -58,37 +63,24 @@ public class UsuarioService {
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario guardar(BeanUsuario usuario) {
-
-        if (usuario.getEstado() == null) {
-            BeanEstadoUsuario estado = new BeanEstadoUsuario();
-            estado.setId(1L);
-            usuario.setEstado(estado);
-        }
-
+        // Después aplicar el hashing o encriptación
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         return usuarioRepository.save(usuario);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario actualizar(Long id, BeanUsuario datosNuevos) {
         return usuarioRepository.findById(id).map(usuario -> {
-
             usuario.setNombre(datosNuevos.getNombre());
             usuario.setApellidos(datosNuevos.getApellidos());
             usuario.setCorreo(datosNuevos.getCorreo());
-            if (datosNuevos.getEstado() != null) {
-                usuario.setEstado(datosNuevos.getEstado());
-            }
-            if (datosNuevos.getCarrera() != null) {
-                usuario.setCarrera(datosNuevos.getCarrera());
-            }
-
+            // Solo actualizamos la foto si se requiere
             if (datosNuevos.getFoto() != null) {
                 usuario.setFoto(datosNuevos.getFoto());
             }
-
+            usuario.setEstado(datosNuevos.getEstado());
             return usuarioRepository.save(usuario);
-
-        }).orElseThrow(() -> new RuntimeException("No se encontró el usuario"));
+        }).orElseThrow(() -> new RuntimeException("No se encontró el usuario para actualizar"));
     }
 
     public void eliminar(Long id) {
