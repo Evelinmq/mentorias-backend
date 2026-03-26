@@ -35,7 +35,7 @@ public class SecurityConfig {
 
                             String correo = authentication.getName();
 
-                            String rolReal = "mentor"; // <---- CAMBIAR PARA PROBAR
+                            String rolReal = "admin"; // <---- CAMBIAR PARA PROBAR
 
                             String jsonResponse = String.format("{\"correo\": \"%s\", \"rol\": \"%s\"}", correo, rolReal);
 
