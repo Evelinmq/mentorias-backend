@@ -10,6 +10,7 @@ import java.util.List;
 
     @RestController
     @RequestMapping("/api/mentorias-usuarios")
+    @CrossOrigin(origins = "http://localhost:5173")
     public class MentoriaUsuarioController {
 
         private final MentoriaUsuarioService mentoriaUsuarioService;

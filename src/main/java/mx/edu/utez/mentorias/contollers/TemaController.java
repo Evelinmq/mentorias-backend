@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/temas")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TemaController {
 
     private final TemaService temaService;

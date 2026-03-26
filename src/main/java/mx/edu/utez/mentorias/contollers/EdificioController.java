@@ -3,15 +3,13 @@ package mx.edu.utez.mentorias.contollers;
 import mx.edu.utez.mentorias.models.Edificio.BeanEdificio;
 import mx.edu.utez.mentorias.services.Edificio.EdificioService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/edificios")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EdificioController {
 
     private final EdificioService edificioService;

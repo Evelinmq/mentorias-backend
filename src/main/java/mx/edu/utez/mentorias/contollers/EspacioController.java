@@ -3,15 +3,13 @@ package mx.edu.utez.mentorias.contollers;
 import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.services.Espacio.EspacioService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/espacios")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EspacioController {
 
     private final EspacioService espacioService;
