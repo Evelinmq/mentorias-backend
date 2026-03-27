@@ -11,14 +11,16 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
+    Optional<BeanUsuario> findByCorreo(String correo);
+    BeanUsuario findMentorByNombre(String nombre);
 
-    @NativeQuery("SELECT * FROM " +
+    /*@NativeQuery("SELECT * FROM " +
             "usuarios u JOIN usuario_rol ur" +
             "ON u.id = ur.usuarioID" +
             "WHERE NOMBRE = :nombre" +
             "AND ur.rolId = 'Mentor'")
     BeanUsuario findMentorByNombre(@Param("nombre") String nombre);
     Optional<BeanUsuario> findByCorreo(String correo);
-
+*/
 
 }

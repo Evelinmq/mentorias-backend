@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
+import mx.edu.utez.mentorias.models.Rol.BeanRol;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +40,14 @@ public class BeanUsuario {
     @ManyToOne
     @JoinColumn(name = "carrera_usuario")
     private BeanCarrera carrera;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private List<BeanRol> roles;
 
 
 }

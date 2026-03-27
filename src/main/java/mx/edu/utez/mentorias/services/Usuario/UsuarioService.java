@@ -1,11 +1,10 @@
 package mx.edu.utez.mentorias.services.Usuario;
 
-import mx.edu.utez.mentorias.contollers.user.dto.CreateUserDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.GetMentorByNameDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
+import mx.edu.utez.mentorias.contollers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +16,16 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
-            UserMapper userMapper
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -84,6 +86,32 @@ public class UsuarioService {
             throw new RuntimeException("No se puede eliminar: Usuario no existe");
         }
         usuarioRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public LoginResponseDTO login(LoginDTO loginDTO) {
+        // 3. Buscar por correo usando tu BeanUsuario
+        BeanUsuario usuario = usuarioRepository.findByCorreo(loginDTO.getCorreo())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 4. Comparar contraseñas encriptadas
+        if (!passwordEncoder.matches(loginDTO.getPassword(), usuario.getContrasena())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // 5. Extraer el rol
+        String nombreRol = "aprendiz"; // valor por defecto
+        if (usuario.getRoles() != null && !usuario.getRoles().isEmpty()) {
+            nombreRol = usuario.getRoles().get(0).getNombre();
+        }
+
+        // 6. Construir el DTO que pide el constructor (Long, String, String, String)
+        return new LoginResponseDTO(
+                usuario.getId(),
+                usuario.getNombre() + " " + usuario.getApellidos(),
+                usuario.getCorreo(),
+                nombreRol.toLowerCase()
+        );
     }
 
 }
