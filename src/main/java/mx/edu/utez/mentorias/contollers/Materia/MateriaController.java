@@ -1,5 +1,6 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.contollers.Materia;
 
+import mx.edu.utez.mentorias.dto.MateriaDTO;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.services.Materia.MateriaService;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,10 @@ public class MateriaController {
         this.materiaService = materiaService;
     }
 
+    // ESTE ES EL ÚNICO GET PARA LA TABLA
     @GetMapping
-    public ResponseEntity<List<BeanMateria>> listar() {
-        return ResponseEntity.ok(materiaService.listarTodas());
+    public ResponseEntity<List<MateriaDTO>> listar() {
+        return ResponseEntity.ok(materiaService.listarTodasConCarrera());
     }
 
     @GetMapping("/{id}")
@@ -29,14 +31,15 @@ public class MateriaController {
         return ResponseEntity.ok(materiaService.buscarPorId(id));
     }
 
+    // CAMBIAMOS A MateriaDTO para que acepte el carreraId del select
     @PostMapping
-    public ResponseEntity<BeanMateria> crear(@RequestBody BeanMateria materia) {
-        return new ResponseEntity<>(materiaService.guardar(materia), HttpStatus.CREATED);
+    public ResponseEntity<BeanMateria> crear(@RequestBody MateriaDTO materiaDTO) {
+        return new ResponseEntity<>(materiaService.guardar(materiaDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BeanMateria> editar(@PathVariable Long id, @RequestBody BeanMateria materia) {
-        return ResponseEntity.ok(materiaService.actualizar(id, materia));
+    public ResponseEntity<BeanMateria> editar(@PathVariable Long id, @RequestBody MateriaDTO dto) {
+        return ResponseEntity.ok(materiaService.actualizar(id, dto));
     }
 
     @DeleteMapping("/{id}")

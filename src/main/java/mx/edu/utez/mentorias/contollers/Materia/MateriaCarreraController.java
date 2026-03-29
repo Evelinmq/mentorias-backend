@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.contollers.Materia;
 
 import mx.edu.utez.mentorias.models.MateriaCarrera.BeanMateriaCarrera;
 import mx.edu.utez.mentorias.services.MateriaCarrera.MateriaCarreraService;
