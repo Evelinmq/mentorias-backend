@@ -2,8 +2,10 @@ package mx.edu.utez.mentorias.services.Usuario;
 
 import mx.edu.utez.mentorias.contollers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
+import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
+    @Autowired
     private final UsuarioRepository usuarioRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -28,13 +31,32 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public BeanUsuario createUser(CreateUserDTO payload) {
+        BeanUsuario newUser = userMapper.createUserToBean(payload);
+
+        if (newUser.getContrasena() != null && !newUser.getContrasena().isEmpty()) {
+            newUser.setContrasena(passwordEncoder.encode(newUser.getContrasena()));
+        }
+
+        if (newUser.getEstado() == null) {
+            BeanEstadoUsuario estadoPendiente = new BeanEstadoUsuario();
+            estadoPendiente.setId(3L);
+            newUser.setEstado(estadoPendiente);
+        }
+
+        return usuarioRepository.save(newUser);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserForClientDTO> listarPorEstado(String estado) {
+        return userMapper.usersToUserDtos(usuarioRepository.findAllByEstadoNombre(estado));
+    }
+
     @Transactional(readOnly = true)
     public List<UserForClientDTO> listarTodos() {
         List<BeanUsuario> usuarios = usuarioRepository.findAll();
-
-        List<UserForClientDTO> usuariosDTO = userMapper.usersToUserDtos(usuarios);
-
-        return usuariosDTO;
+        return userMapper.usersToUserDtos(usuarios);
     }
 
     @Transactional(readOnly = true)
@@ -50,35 +72,29 @@ public class UsuarioService {
         return userMapper.userToUserDto(user);
     }
 
-    public Object createUser(CreateUserDTO payload) {
-        // Validaciones para crear un usuario
-
-        // Mapear los datos del dto de creación a una entidad usuario que podamos registrar
-        BeanUsuario newUser = userMapper.createUserToBean(payload);
-
-        return usuarioRepository.saveAndFlush(newUser);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public BeanUsuario guardar(BeanUsuario usuario) {
-        // Después aplicar el hashing o encriptación
-        usuario.setContrasena(usuario.getContrasena());
-        return usuarioRepository.save(usuario);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario actualizar(Long id, BeanUsuario datosNuevos) {
-        return usuarioRepository.findById(id).map(usuario -> {
-            usuario.setNombre(datosNuevos.getNombre());
-            usuario.setApellidos(datosNuevos.getApellidos());
-            usuario.setCorreo(datosNuevos.getCorreo());
-            // Solo actualizamos la foto si se requiere
-            if (datosNuevos.getFoto() != null) {
-                usuario.setFoto(datosNuevos.getFoto());
-            }
-            usuario.setEstado(datosNuevos.getEstado());
-            return usuarioRepository.save(usuario);
-        }).orElseThrow(() -> new RuntimeException("No se encontró el usuario para actualizar"));
+        BeanUsuario existente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+
+        existente.setNombre(datosNuevos.getNombre());
+        existente.setApellidoP(datosNuevos.getApellidoP());
+        existente.setApellidoM(datosNuevos.getApellidoM());
+        existente.setCorreo(datosNuevos.getCorreo());
+
+        existente.setCarrera(datosNuevos.getCarrera());
+        existente.setRoles(datosNuevos.getRoles());
+
+        if (datosNuevos.getEstado() != null) {
+            existente.setEstado(datosNuevos.getEstado());
+        }
+
+        if (datosNuevos.getContrasena() != null && !datosNuevos.getContrasena().isEmpty()) {
+            existente.setContrasena(passwordEncoder.encode(datosNuevos.getContrasena()));
+        }
+
+        return usuarioRepository.save(existente);
     }
 
     public void eliminar(Long id) {
@@ -108,7 +124,7 @@ public class UsuarioService {
         // 6. Construir el DTO que pide el constructor (Long, String, String, String)
         return new LoginResponseDTO(
                 usuario.getId(),
-                usuario.getNombre() + " " + usuario.getApellidos(),
+                usuario.getNombre() + " " + usuario.getApellidoP() + " " + usuario.getApellidoM(),
                 usuario.getCorreo(),
                 nombreRol.toLowerCase()
         );

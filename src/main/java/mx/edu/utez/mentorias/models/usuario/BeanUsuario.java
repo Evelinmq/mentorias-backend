@@ -24,7 +24,8 @@ public class BeanUsuario {
     private Long id;
 
     private String nombre;
-    private String apellidos;
+    private String apellidoP;
+    private String apellidoM;
     private String correo;
     @JsonIgnore
     private String contrasena;

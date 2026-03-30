@@ -28,14 +28,14 @@ public class CarreraController {
     @PostMapping
     public ResponseEntity<BeanCarrera> agregar(@RequestBody BeanCarrera carrera) {
         BeanCarrera nuevaCarrera = carreraService.crearCarrera(carrera);
-        return ResponseEntity.ok(carrera);
+        return ResponseEntity.ok(nuevaCarrera);
     }
 
     // EDITAR
     @PutMapping("/{id}")
     public ResponseEntity<BeanCarrera> editar(@PathVariable Long id, @RequestBody BeanCarrera carrera) {
         BeanCarrera actualizada = carreraService.actualizar(id, carrera);
-        return ResponseEntity.ok(carrera);
+        return ResponseEntity.ok(actualizada);
     }
 
 }

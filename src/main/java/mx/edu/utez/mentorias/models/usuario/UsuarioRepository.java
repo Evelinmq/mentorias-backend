@@ -1,5 +1,6 @@
 package mx.edu.utez.mentorias.models.usuario;
 
+import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,12 @@ public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
     BeanUsuario findMentorByNombre(@Param("nombre") String nombre);
     Optional<BeanUsuario> findByCorreo(String correo);
 */
+
+    @Query("SELECT DISTINCT u FROM BeanUsuario u " +
+            "INNER JOIN FETCH u.estado e " +
+            "LEFT JOIN FETCH u.carrera c " +
+            "INNER JOIN FETCH u.roles r " +
+            "WHERE LOWER(e.nombre) = LOWER(:nombreEstado)")
+    List<BeanUsuario> findAllByEstadoNombre(@Param("nombreEstado") String nombreEstado);
 
 }
