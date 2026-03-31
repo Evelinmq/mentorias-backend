@@ -115,6 +115,14 @@ public class UsuarioService {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
+        //se verifica el estado
+        if (usuario.getEstado() == null || usuario.getEstado().getId() != 1L) {
+            if (usuario.getEstado() != null && usuario.getEstado().getId() == 3L) {
+                throw new RuntimeException("Tu cuenta está pendiente de aprobación por un administrador.");
+            }
+            throw new RuntimeException("Tu cuenta no está activa.");
+        }
+
         // 5. Extraer el rol
         String nombreRol = "aprendiz"; // valor por defecto
         if (usuario.getRoles() != null && !usuario.getRoles().isEmpty()) {

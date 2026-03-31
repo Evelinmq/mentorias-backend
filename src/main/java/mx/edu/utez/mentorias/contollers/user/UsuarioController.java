@@ -1,8 +1,6 @@
 package mx.edu.utez.mentorias.contollers.user;
 
-import mx.edu.utez.mentorias.contollers.user.dto.CreateUserDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.GetMentorByNameDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
+import mx.edu.utez.mentorias.contollers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.services.Usuario.UsuarioService;
@@ -12,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -64,5 +63,17 @@ public class UsuarioController {
             @RequestBody GetMentorByNameDTO getByNameDTO
             ){
         return usuarioService.getMentorByName(getByNameDTO);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        try {
+
+            LoginResponseDTO response = usuarioService.login(loginDTO);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", e.getMessage()));
+        }
     }
 }
