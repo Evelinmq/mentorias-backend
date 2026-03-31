@@ -1,7 +1,7 @@
 package mx.edu.utez.mentorias.mappers;
 
-import mx.edu.utez.mentorias.contollers.user.dto.CreateUserDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
+import mx.edu.utez.mentorias.controllers.user.dto.CreateUserDTO;
+import mx.edu.utez.mentorias.controllers.user.dto.UserForClientDTO;
 import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
 import mx.edu.utez.mentorias.models.Rol.BeanRol;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;

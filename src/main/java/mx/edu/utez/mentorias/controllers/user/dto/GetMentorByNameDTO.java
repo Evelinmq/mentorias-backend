@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers.user.dto;
+package mx.edu.utez.mentorias.controllers.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDTO {
-    private Long id;
+public class GetMentorByNameDTO {
     private String nombre;
-    private String correo;
-    private String rol;
 }

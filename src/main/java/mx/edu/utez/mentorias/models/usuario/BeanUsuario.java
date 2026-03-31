@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuario")
 public class BeanUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,7 @@ public class BeanUsuario {
     private String apellidoM;
     private String correo;
     @JsonIgnore
+    @Column(name = "contraseña")
     private String contrasena;
 
     @Lob
@@ -35,19 +36,20 @@ public class BeanUsuario {
     private byte[] foto;
 
     @ManyToOne
-    @JoinColumn(name = "estado_usuario_id")
+    @JoinColumn(name = "estadoID")
     private BeanEstadoUsuario estado;
 
     @ManyToOne
-    @JoinColumn(name = "carrera_usuario")
+    @JoinColumn(name = "carreraID")
     private BeanCarrera carrera;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "usuario_rol",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "rol_id")
+            name = "usuariorol",
+            joinColumns = @JoinColumn(name = "usuarioID"),
+            inverseJoinColumns = @JoinColumn(name = "rolID")
     )
+    @JsonIgnore
     private List<BeanRol> roles;
 
 

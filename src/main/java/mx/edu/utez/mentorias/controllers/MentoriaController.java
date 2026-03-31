@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.controllers;
 
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.services.Mentoria.MentoriaService;
@@ -45,6 +45,16 @@ public class MentoriaController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         mentoriaService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+    //aceptar y cancelar
+    @PutMapping("/{id}/aceptar")
+    public ResponseEntity<BeanMentoria> aceptarMentoria(@PathVariable Long id) {
+        return ResponseEntity.ok(mentoriaService.aceptarMentoria(id));
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<BeanMentoria> cancelarMentoria(@PathVariable Long id) {
+        return ResponseEntity.ok(mentoriaService.cancelarMentoria(id));
     }
 
     // Rango de fechas

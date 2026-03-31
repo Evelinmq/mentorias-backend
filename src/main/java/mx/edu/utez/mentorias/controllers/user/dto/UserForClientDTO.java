@@ -1,11 +1,9 @@
-package mx.edu.utez.mentorias.contollers.user.dto;
+package mx.edu.utez.mentorias.controllers.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
-import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 
 import java.util.List;
 
