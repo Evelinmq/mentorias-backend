@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "estadomentoria")
+@Table(name = "estadoMentoria")
 public class BeanEstadoMentoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

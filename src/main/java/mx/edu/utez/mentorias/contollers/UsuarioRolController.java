@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.controllers;
+package mx.edu.utez.mentorias.contollers;
 
 import mx.edu.utez.mentorias.models.UsuarioRol.BeanUsuarioRol;
 import mx.edu.utez.mentorias.services.UsuarioRol.UsuarioRolService;

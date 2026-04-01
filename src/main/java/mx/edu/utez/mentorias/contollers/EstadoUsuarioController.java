@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.controllers;
+package mx.edu.utez.mentorias.contollers;
 
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 import mx.edu.utez.mentorias.services.EstadoUsuario.EstadoUsuarioService;

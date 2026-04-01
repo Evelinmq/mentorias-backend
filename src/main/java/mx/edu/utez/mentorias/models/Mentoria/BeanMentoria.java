@@ -4,9 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,36 +33,29 @@ public class BeanMentoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "fecha")
     private LocalDate fecha;
-
-    @Column(name = "horaInicio")
     private LocalTime horaInicio;
-
-    @Column(name = "horaFin")
     private LocalTime horaFin;
-
     private Integer cuatrimestre;
     private Integer cupo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "espacioID")
+    @ManyToOne
+    @JoinColumn(name = "espacio_id")
     private BeanEspacio espacio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estadoID")
+    @ManyToOne
+    @JoinColumn(name = "estado_id")
     private BeanEstadoMentoria estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mentorID")
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
     private BeanUsuario mentor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "materiaID")
+    @ManyToOne
+    @JoinColumn(name = "materia_id")
     private BeanMateria materia;
 
-    @OneToMany(mappedBy = "mentoria", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
+    @OneToMany(mappedBy = "mentoria")
     private List<BeanTema> temas;
 }

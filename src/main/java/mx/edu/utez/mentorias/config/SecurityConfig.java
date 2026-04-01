@@ -3,6 +3,7 @@ package mx.edu.utez.mentorias.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy; // <--- NUEVO IMPORT
@@ -43,9 +44,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/mentorias/**").permitAll()
                         .requestMatchers("/api/carreras/**").permitAll()
                         .requestMatchers("/api/materias/**").permitAll()
-                        .requestMatchers("/api/usuarios/**").permitAll()
-                        .requestMatchers("/api/edificios/**").permitAll()
-                        .requestMatchers("/api/espacios/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/usuarios/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

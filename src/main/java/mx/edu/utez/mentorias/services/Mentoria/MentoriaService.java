@@ -1,8 +1,6 @@
 package mx.edu.utez.mentorias.services.Mentoria;
 
 
-import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
-import mx.edu.utez.mentorias.models.EstadoMentoria.EstadoMentoriaRepository;
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.models.Mentoria.MentoriaRepository;
 import org.springframework.stereotype.Service;
@@ -14,39 +12,10 @@ import java.util.List;
 @Service
 public class MentoriaService {
 
-    private final MentoriaRepository mentoriaRepository;
-    private final EstadoMentoriaRepository estadoMentoriaRepository;
+    private MentoriaRepository mentoriaRepository;
 
-    public MentoriaService(MentoriaRepository mentoriaRepository,
-                           EstadoMentoriaRepository estadoMentoriaRepository) {
+    public MentoriaService(MentoriaRepository mentoriaRepository) {
         this.mentoriaRepository = mentoriaRepository;
-        this.estadoMentoriaRepository = estadoMentoriaRepository;
-    }
-
-    public BeanMentoria aceptarMentoria(Long id) {
-
-        BeanMentoria mentoria = mentoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
-
-        BeanEstadoMentoria estado = estadoMentoriaRepository.findById(2L)
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
-
-        mentoria.setEstado(estado);
-
-        return mentoriaRepository.save(mentoria);
-    }
-
-    public BeanMentoria cancelarMentoria(Long id) {
-
-        BeanMentoria mentoria = mentoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
-
-        BeanEstadoMentoria estado = estadoMentoriaRepository.findById(3L)
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
-
-        mentoria.setEstado(estado);
-
-        return mentoriaRepository.save(mentoria);
     }
 
     @Transactional(readOnly = true)

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
-@SpringBootApplication(scanBasePackages = "mx.edu.utez.mentorias")
+@SpringBootApplication
 public class MentoriasApplication {
 
 	public static void main(String[] args) {

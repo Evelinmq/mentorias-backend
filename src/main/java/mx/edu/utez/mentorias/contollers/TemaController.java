@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.controllers;
+package mx.edu.utez.mentorias.contollers;
 
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.services.Tema.TemaService;

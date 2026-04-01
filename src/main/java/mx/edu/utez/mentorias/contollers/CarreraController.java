@@ -1,7 +1,8 @@
-package mx.edu.utez.mentorias.controllers;
+package mx.edu.utez.mentorias.contollers;
 
 import mx.edu.utez.mentorias.models.Carrera.BeanCarrera;
 import mx.edu.utez.mentorias.services.Carrera.CarreraService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.controllers.user.dto;
+package mx.edu.utez.mentorias.contollers.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
