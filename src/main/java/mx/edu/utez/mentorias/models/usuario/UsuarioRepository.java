@@ -2,10 +2,12 @@ package mx.edu.utez.mentorias.models.usuario;
 
 import mx.edu.utez.mentorias.contollers.user.dto.UserForClientDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +33,9 @@ public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
             "WHERE LOWER(e.nombre) = LOWER(:nombreEstado)")
     List<BeanUsuario> findAllByEstadoNombre(@Param("nombreEstado") String nombreEstado);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE BeanUsuario u SET u.estado.id = :estadoId WHERE u.id = :usuarioId")
+    void updateEstado(@Param("usuarioId") Long usuarioId,
+                      @Param("estadoId") Long estadoId);
 }

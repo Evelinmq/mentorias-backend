@@ -3,6 +3,10 @@ package mx.edu.utez.mentorias.services.Usuario;
 import mx.edu.utez.mentorias.contollers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
+import mx.edu.utez.mentorias.models.EstadoUsuario.EstadoUsuarioRepository;
+import mx.edu.utez.mentorias.models.Rol.BeanRol;
+import mx.edu.utez.mentorias.models.Rol.RolRepository;
+import mx.edu.utez.mentorias.models.UsuarioRol.UsuarioRolRepository;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +24,42 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private EstadoUsuarioRepository estadoUsuarioRepository;
+    private final RolRepository rolRepository;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             UserMapper userMapper,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            EstadoUsuarioRepository estadoUsuarioRepository,
+            RolRepository rolRepository
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.estadoUsuarioRepository = estadoUsuarioRepository;
+        this.rolRepository = rolRepository;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public BeanUsuario createUser(CreateUserDTO payload) {
+
         BeanUsuario newUser = userMapper.createUserToBean(payload);
 
+        // 🔐 contraseña
         if (newUser.getContrasena() != null && !newUser.getContrasena().isEmpty()) {
             newUser.setContrasena(passwordEncoder.encode(newUser.getContrasena()));
         }
 
-        if (newUser.getEstado() == null) {
-            BeanEstadoUsuario estadoPendiente = new BeanEstadoUsuario();
-            estadoPendiente.setId(3L);
-            newUser.setEstado(estadoPendiente);
+        // ✅ estado REAL desde BD
+        BeanEstadoUsuario estado = estadoUsuarioRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+        newUser.setEstado(estado);
+
+        // ✅ roles reales desde BD
+        if (payload.getRolesIds() != null && !payload.getRolesIds().isEmpty()) {
+            List<BeanRol> roles = rolRepository.findAllById(payload.getRolesIds());
+            newUser.setRoles(roles);
         }
 
         return usuarioRepository.save(newUser);
@@ -73,10 +90,11 @@ public class UsuarioService {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public BeanUsuario actualizar(Long id, BeanUsuario datosNuevos) {
+
         BeanUsuario existente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         existente.setNombre(datosNuevos.getNombre());
         existente.setApellidoP(datosNuevos.getApellidoP());
@@ -84,17 +102,39 @@ public class UsuarioService {
         existente.setCorreo(datosNuevos.getCorreo());
 
         existente.setCarrera(datosNuevos.getCarrera());
-        existente.setRoles(datosNuevos.getRoles());
 
-        if (datosNuevos.getEstado() != null) {
-            existente.setEstado(datosNuevos.getEstado());
+        // ✅ roles desde BD (NO directo)
+        if (datosNuevos.getRoles() != null) {
+            List<Long> idsRoles = datosNuevos.getRoles()
+                    .stream()
+                    .map(BeanRol::getId)
+                    .toList();
+
+            List<BeanRol> roles = rolRepository.findAllById(idsRoles);
+            existente.setRoles(roles);
         }
 
+        // ✅ estado desde BD
+        if (datosNuevos.getEstado() != null) {
+            BeanEstadoUsuario estado = estadoUsuarioRepository
+                    .findById(datosNuevos.getEstado().getId())
+                    .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+
+            existente.setEstado(estado);
+        }
+
+        // 🔐 contraseña
         if (datosNuevos.getContrasena() != null && !datosNuevos.getContrasena().isEmpty()) {
             existente.setContrasena(passwordEncoder.encode(datosNuevos.getContrasena()));
         }
 
         return usuarioRepository.save(existente);
+    }
+
+
+    @Transactional
+    public void cambiarEstado(Long id, Long idNuevoEstado) {
+        usuarioRepository.updateEstado(id, idNuevoEstado);
     }
 
     public void eliminar(Long id) {
