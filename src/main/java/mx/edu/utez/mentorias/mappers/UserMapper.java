@@ -55,20 +55,24 @@ public class UserMapper {
         newUser.setCorreo(payload.getEmail());
         newUser.setContrasena(payload.getPassword());
 
-        if (payload.getRolesIds() != null) {
-            List<BeanRol> roles = payload.getRolesIds().stream().map(id -> {
-                BeanRol rol = new BeanRol();
-                rol.setId(id);
-                return rol;
-            }).collect(Collectors.toList());
-            newUser.setRoles(roles);
-        }
+
 
         if (payload.getCarreraId() != null) {
             BeanCarrera carrera = new BeanCarrera();
             carrera.setId(payload.getCarreraId());
             newUser.setCarrera(carrera);
         }
+
+        if (payload.getRolesIds() != null) {
+            List<BeanRol> roles = payload.getRolesIds().stream().map(id -> {
+                BeanRol rol = new BeanRol();
+                rol.setId(id);
+                return rol;
+            }).collect(Collectors.toList());
+
+            newUser.setRoles(roles);
+        }
+
 
         return newUser;
     }

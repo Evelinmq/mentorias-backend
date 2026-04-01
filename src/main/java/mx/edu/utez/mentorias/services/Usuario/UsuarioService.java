@@ -46,17 +46,17 @@ public class UsuarioService {
 
         BeanUsuario newUser = userMapper.createUserToBean(payload);
 
-        // 🔐 contraseña
+        // contraseña
         if (newUser.getContrasena() != null && !newUser.getContrasena().isEmpty()) {
             newUser.setContrasena(passwordEncoder.encode(newUser.getContrasena()));
         }
 
-        // ✅ estado REAL desde BD
+        // estado REAL desde BD
         BeanEstadoUsuario estado = estadoUsuarioRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
         newUser.setEstado(estado);
 
-        // ✅ roles reales desde BD
+        // roles reales desde BD
         if (payload.getRolesIds() != null && !payload.getRolesIds().isEmpty()) {
             List<BeanRol> roles = rolRepository.findAllById(payload.getRolesIds());
             newUser.setRoles(roles);
@@ -103,18 +103,21 @@ public class UsuarioService {
 
         existente.setCarrera(datosNuevos.getCarrera());
 
-        // ✅ roles desde BD (NO directo)
+        // roles desde BD (NO directo)
         if (datosNuevos.getRoles() != null) {
+            existente.getRoles().clear();
+
             List<Long> idsRoles = datosNuevos.getRoles()
                     .stream()
                     .map(BeanRol::getId)
                     .toList();
 
             List<BeanRol> roles = rolRepository.findAllById(idsRoles);
-            existente.setRoles(roles);
+
+            existente.getRoles().addAll(roles);
         }
 
-        // ✅ estado desde BD
+        // estado desde BD
         if (datosNuevos.getEstado() != null) {
             BeanEstadoUsuario estado = estadoUsuarioRepository
                     .findById(datosNuevos.getEstado().getId())
@@ -123,7 +126,7 @@ public class UsuarioService {
             existente.setEstado(estado);
         }
 
-        // 🔐 contraseña
+        // contraseña
         if (datosNuevos.getContrasena() != null && !datosNuevos.getContrasena().isEmpty()) {
             existente.setContrasena(passwordEncoder.encode(datosNuevos.getContrasena()));
         }
