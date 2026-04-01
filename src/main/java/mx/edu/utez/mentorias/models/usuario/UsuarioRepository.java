@@ -27,7 +27,7 @@ public interface UsuarioRepository extends JpaRepository<BeanUsuario, Long> {
     @Query("SELECT DISTINCT u FROM BeanUsuario u " +
             "INNER JOIN FETCH u.estado e " +
             "LEFT JOIN FETCH u.carrera c " +
-            "INNER JOIN FETCH u.roles r " +
+            "LEFT JOIN FETCH u.roles r " +
             "WHERE LOWER(e.nombre) = LOWER(:nombreEstado)")
     List<BeanUsuario> findAllByEstadoNombre(@Param("nombreEstado") String nombreEstado);
 
