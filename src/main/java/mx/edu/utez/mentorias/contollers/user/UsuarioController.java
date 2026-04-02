@@ -46,6 +46,12 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.createUser(payload), HttpStatus.CREATED);
     }
 
+    @PostMapping("/cambiar-estado")
+    public ResponseEntity<?> cambiarEstado(@RequestBody Map<String, Long> payload) {
+        usuarioService.cambiarEstado(payload.get("id"), payload.get("nuevoEstadoId"));
+        return ResponseEntity.ok(Map.of("message", "Estado actualizado"));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<BeanUsuario> editar(@PathVariable Long id, @RequestBody CreateUserDTO payload) {
         BeanUsuario usuarioParaActualizar = userMapper.createUserToBean(payload);

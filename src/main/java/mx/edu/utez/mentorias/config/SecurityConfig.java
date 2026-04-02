@@ -42,12 +42,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/mentorias/**").permitAll()
+                        .requestMatchers("/api/mentorias-usuarios/**").permitAll()
                         .requestMatchers("/api/carreras/**").permitAll()
                         .requestMatchers("/api/materias/**").permitAll()
                         .requestMatchers("/api/edificios/**").permitAll()
                         .requestMatchers("/api/espacios/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/usuarios/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/reportes/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
