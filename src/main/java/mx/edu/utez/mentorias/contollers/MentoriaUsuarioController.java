@@ -19,6 +19,7 @@ import java.util.List;
             this.mentoriaUsuarioService = mentoriaUsuarioService;
         }
 
+
         @GetMapping
         public ResponseEntity<List<BeanMentoriaUsuario>> listar() {
             return ResponseEntity.ok(mentoriaUsuarioService.listarInscripciones());
