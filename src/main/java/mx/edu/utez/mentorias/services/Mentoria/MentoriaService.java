@@ -1,6 +1,8 @@
 package mx.edu.utez.mentorias.services.Mentoria;
 
 
+import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
+import mx.edu.utez.mentorias.models.EstadoMentoria.EstadoMentoriaRepository;
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.models.Mentoria.MentoriaRepository;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,42 @@ import java.util.List;
 @Service
 public class MentoriaService {
 
-    private MentoriaRepository mentoriaRepository;
+    private final MentoriaRepository mentoriaRepository;
+    private final EstadoMentoriaRepository estadoMentoriaRepository;
 
-    public MentoriaService(MentoriaRepository mentoriaRepository) {
+    public MentoriaService(MentoriaRepository mentoriaRepository,
+                           EstadoMentoriaRepository estadoMentoriaRepository) {
         this.mentoriaRepository = mentoriaRepository;
+        this.estadoMentoriaRepository = estadoMentoriaRepository;
+    }
+
+    @Transactional
+    public BeanMentoria aceptarMentoria(Long id) {
+
+        BeanMentoria mentoria = mentoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
+
+        BeanEstadoMentoria estado = estadoMentoriaRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+
+        mentoria.setEstado(estado);
+
+        return mentoriaRepository.save(mentoria);
+    }
+
+    @Transactional
+    public BeanMentoria cancelarMentoria(Long id) {
+
+        BeanMentoria mentoria = mentoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
+
+        // 2 = CANCELADA
+        BeanEstadoMentoria estado = estadoMentoriaRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Estado CANCELADA no existe"));
+
+        mentoria.setEstado(estado);
+
+        return mentoriaRepository.save(mentoria);
     }
 
     @Transactional(readOnly = true)

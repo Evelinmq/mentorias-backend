@@ -30,6 +30,15 @@ public class MentoriaController {
     public ResponseEntity<BeanMentoria> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(mentoriaService.buscarPorId(id));
     }
+    @PutMapping("/{id}/aceptar")
+    public ResponseEntity<BeanMentoria> aceptarMentoria(@PathVariable Long id) {
+        return ResponseEntity.ok(mentoriaService.aceptarMentoria(id));
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<BeanMentoria> cancelarMentoria(@PathVariable Long id) {
+        return ResponseEntity.ok(mentoriaService.cancelarMentoria(id));
+    }
 
     @PostMapping
     public ResponseEntity<BeanMentoria> crear(@RequestBody BeanMentoria mentoria) {
