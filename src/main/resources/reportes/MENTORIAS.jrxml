@@ -73,16 +73,16 @@ WHERE
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="150" y="0" width="316" height="30" forecolor="#2E48DB" uuid="003b8691-c6cc-46be-b9eb-d53bb106e1e1">
+				<reportElement x="100" y="0" width="425" height="30" forecolor="#102F5C" uuid="003b8691-c6cc-46be-b9eb-d53bb106e1e1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0816e169-665a-4285-8ce2-48c088f4734f"/>
 				</reportElement>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[UNIVERSIDAD TECNOLOGICA DE EMILIANO ZAPATA]]></text>
+				<text><![CDATA[UNIVERSIDAD TECNOLÓGICA DE EMILIANO  ZAPATA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="201" y="20" width="209" height="23" forecolor="#2E48DB" uuid="30c92025-cb6f-48b2-9006-e23543424eb3"/>
+				<reportElement x="201" y="20" width="209" height="23" forecolor="#102F5C" uuid="30c92025-cb6f-48b2-9006-e23543424eb3"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
