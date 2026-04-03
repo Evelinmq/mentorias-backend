@@ -52,6 +52,10 @@ public class MentoriaService {
         return mentoriaRepository.save(mentoria);
     }
 
+    public List<BeanMentoria> obtenerMentoriasDelMentor(Long mentorId){
+        return mentoriaRepository.findByMentor(mentorId);
+    }
+
     @Transactional(readOnly = true)
     public List<BeanMentoria> listarTodas() {
         return mentoriaRepository.findAll();

@@ -5,14 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +13,7 @@ import lombok.Setter;
 import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
 import mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;
+import mx.edu.utez.mentorias.models.MentoriaUsuario.BeanMentoriaUsuario;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 
@@ -47,7 +41,7 @@ public class BeanMentoria {
     @JoinColumn(name = "estado_id")
     private BeanEstadoMentoria estado;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mentor_id")
     private BeanUsuario mentor;
 
@@ -58,4 +52,7 @@ public class BeanMentoria {
     @JsonManagedReference
     @OneToMany(mappedBy = "mentoria")
     private List<BeanTema> temas;
+
+    @OneToMany(mappedBy = "mentoria", fetch = FetchType.LAZY)
+    private List<BeanMentoriaUsuario> alumnos;
 }

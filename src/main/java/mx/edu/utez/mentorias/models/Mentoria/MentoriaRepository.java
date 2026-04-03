@@ -29,4 +29,7 @@ public interface MentoriaRepository extends JpaRepository<BeanMentoria, Long> {
             @Param("fin") LocalDate fin,
             @Param("materiaId") Long materiaId,
             @Param("mentorId") Long mentorId);
+
+    @Query("SELECT m FROM BeanMentoria m WHERE m.mentor.id = :mentorId")
+    List<BeanMentoria> findByMentor(@Param("mentorId") Long mentorId);
 }
