@@ -10,11 +10,15 @@ import mx.edu.utez.mentorias.models.UsuarioRol.UsuarioRolRepository;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,19 +30,23 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private EstadoUsuarioRepository estadoUsuarioRepository;
     private final RolRepository rolRepository;
+    private final JavaMailSender mailSender;
+    private static final Map<String, String> codigosTemporales = new HashMap<>();
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             UserMapper userMapper,
             PasswordEncoder passwordEncoder,
             EstadoUsuarioRepository estadoUsuarioRepository,
-            RolRepository rolRepository
+            RolRepository rolRepository,
+            JavaMailSender mailSender
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.estadoUsuarioRepository = estadoUsuarioRepository;
         this.rolRepository = rolRepository;
+        this.mailSender = mailSender;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -179,6 +187,56 @@ public class UsuarioService {
                 usuario.getCorreo(),
                 nombreRol.toLowerCase()
         );
+    }
+
+    public boolean verificarCodigo(String correo, String codigo) {
+        String codigoEnMemoria = codigosTemporales.get(correo);
+        System.out.println("DEBUG: Correo buscado: " + correo);
+        System.out.println("DEBUG: Código en memoria: " + codigoEnMemoria);
+        System.out.println("DEBUG: Código recibido del front: " + codigo);
+
+        return codigo != null && codigo.equals(codigoEnMemoria);
+    }
+
+    @Transactional
+    public void actualizarPassword(String correo, String nuevaPassword) {
+        // Buscamos al usuario por el correo que traemos desde el flujo
+        BeanUsuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Encriptamos la nueva contraseña
+        usuario.setContrasena(passwordEncoder.encode(nuevaPassword));
+
+        // Guardamos los cambios
+        usuarioRepository.save(usuario);
+
+        // Limpiar el código temporal para que no se pueda usar de nuevo
+        codigosTemporales.remove(correo);
+    }
+
+    public void generarYEnviarCodigo(String correo) {
+        // 1. Validar usuario
+        usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 2. Generar código
+        String codigo = String.valueOf((int)(Math.random() * 90000) + 10000);
+        codigosTemporales.put(correo, codigo);
+
+        // 3. ENVIAR CORREO REAL
+        try {
+            SimpleMailMessage mensaje = new SimpleMailMessage();
+            mensaje.setFrom("20243ds170@utez.edu.mx");
+            mensaje.setTo(correo);
+            mensaje.setSubject("Código de Verificación - Mentorias Académicas");
+            mensaje.setText("Tu código para restablecer la contraseña de tu cuenta es: " + codigo);
+
+            mailSender.send(mensaje);
+        } catch (Exception e) {
+            // Si falla, imprime el error completo en la consola para ver el motivo exacto
+            e.printStackTrace();
+            throw new RuntimeException("Error al enviar: " + e.getMessage());
+        }
     }
 
 }

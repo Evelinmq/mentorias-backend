@@ -52,6 +52,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/api/usuarios/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/usuarios/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/reportes/**").permitAll()
+                        .requestMatchers("/api/usuarios/recuperar-password",
+                                "/api/usuarios/verificar-codigo",
+                                "/api/usuarios/actualizar-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

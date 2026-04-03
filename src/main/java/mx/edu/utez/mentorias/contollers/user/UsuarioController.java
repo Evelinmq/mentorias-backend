@@ -82,4 +82,33 @@ public class UsuarioController {
                     .body(Map.of("message", e.getMessage()));
         }
     }
+
+    @PostMapping("/recuperar-password")
+    public ResponseEntity<?> enviarCodigo(@RequestBody Map<String, String> payload) {
+        usuarioService.generarYEnviarCodigo(payload.get("correo"));
+        return ResponseEntity.ok(Map.of("message", "Código enviado"));
+    }
+
+    @PostMapping("/verificar-codigo")
+    public ResponseEntity<?> verificar(@RequestBody Map<String, String> request) {
+        String correo = request.get("correo");
+        String codigo = request.get("codigo");
+
+        System.out.println("Verificando para: " + correo + " con codigo: " + codigo);
+
+        boolean esValido = usuarioService.verificarCodigo(correo, codigo);
+
+        if (esValido) {
+            return ResponseEntity.ok(Map.of("message", "Código correcto"));
+        } else {
+            // Si el código no coincide, mandamos 400
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código incorrecto");
+        }
+    }
+
+    @PostMapping("/actualizar-password")
+    public ResponseEntity<?> actualizarPassword(@RequestBody Map<String, String> payload) {
+        usuarioService.actualizarPassword(payload.get("correo"), payload.get("nuevaPassword"));
+        return ResponseEntity.ok(Map.of("message", "Contraseña actualizada con éxito"));
+    }
 }

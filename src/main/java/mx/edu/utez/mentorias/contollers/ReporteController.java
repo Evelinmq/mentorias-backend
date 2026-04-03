@@ -1,4 +1,4 @@
-﻿package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.contollers;
 
 import mx.edu.utez.mentorias.services.Reporte.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;

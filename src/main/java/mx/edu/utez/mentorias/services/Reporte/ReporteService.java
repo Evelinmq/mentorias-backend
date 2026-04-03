@@ -1,4 +1,4 @@
-﻿package mx.edu.utez.mentorias.services.Reporte;
+package mx.edu.utez.mentorias.services.Reporte;
 
 import net.sf.jasperreports.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
