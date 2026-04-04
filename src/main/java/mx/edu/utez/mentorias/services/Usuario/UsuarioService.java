@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -39,7 +40,7 @@ public class UsuarioService {
             PasswordEncoder passwordEncoder,
             EstadoUsuarioRepository estadoUsuarioRepository,
             RolRepository rolRepository,
-            JavaMailSender mailSender
+            JavaMailSender mailSender //Si sale error en esta linea por alguna razón ignorenlo, en realidad si sirve
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
@@ -177,7 +178,9 @@ public class UsuarioService {
         // 5. Extraer el rol
         String nombreRol = "aprendiz"; // valor por defecto
         if (usuario.getRoles() != null && !usuario.getRoles().isEmpty()) {
-            nombreRol = usuario.getRoles().get(0).getNombre();
+            nombreRol = usuario.getRoles().stream()
+                    .map(rol -> rol.getNombre().toLowerCase())
+                    .collect(Collectors.joining(","));
         }
 
         // 6. Construir el DTO que pide el constructor (Long, String, String, String)
