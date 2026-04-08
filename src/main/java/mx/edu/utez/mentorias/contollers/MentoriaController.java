@@ -46,6 +46,12 @@ public class MentoriaController {
         return ResponseEntity.ok(mentoriaService.cancelarMentoria(id));
     }
 
+    @GetMapping("/proximas")
+    public ResponseEntity<List<BeanMentoria>> listarProximas() {
+        // Usamos el método del service que ya tiene el filtro de fecha y nombre
+        return ResponseEntity.ok(mentoriaService.listarProximas());
+    }
+
     @PostMapping
     public ResponseEntity<BeanMentoria> crear(@RequestBody BeanMentoria mentoria) {
         return new ResponseEntity<>(mentoriaService.guardar(mentoria), HttpStatus.CREATED);

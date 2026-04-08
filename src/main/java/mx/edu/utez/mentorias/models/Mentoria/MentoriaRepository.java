@@ -32,4 +32,10 @@ public interface MentoriaRepository extends JpaRepository<BeanMentoria, Long> {
 
     @Query("SELECT m FROM BeanMentoria m WHERE m.mentor.id = :mentorId")
     List<BeanMentoria> findByMentor(@Param("mentorId") Long mentorId);
+
+    @Query("SELECT m FROM BeanMentoria m WHERE m.fecha >= :hoy " +
+            "AND m.mentor.nombre IS NOT NULL " +
+            "ORDER BY m.fecha ASC")
+    List<BeanMentoria> findMentoriasVigentesYReales(@Param("hoy") LocalDate hoy);
 }
+

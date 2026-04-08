@@ -23,6 +23,14 @@ public class MentoriaService {
         this.estadoMentoriaRepository = estadoMentoriaRepository;
     }
 
+    // MentoriaService.java
+    @Transactional(readOnly = true)
+    public List<BeanMentoria> listarProximas() {
+        // Asegúrate de que este nombre sea el mismo que en el Repository
+        return mentoriaRepository.findMentoriasVigentesYReales(LocalDate.now());
+    }
+
+
     @Transactional
     public BeanMentoria aceptarMentoria(Long id) {
 
@@ -55,6 +63,7 @@ public class MentoriaService {
     public List<BeanMentoria> obtenerMentoriasDelMentor(Long mentorId){
         return mentoriaRepository.findByMentor(mentorId);
     }
+
 
     @Transactional(readOnly = true)
     public List<BeanMentoria> listarTodas() {
