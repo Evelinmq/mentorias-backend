@@ -1,7 +1,7 @@
-package mx.edu.utez.mentorias.contollers.auth;
+package mx.edu.utez.mentorias.controllers.auth;
 
-import mx.edu.utez.mentorias.contollers.user.dto.LoginDTO;
-import mx.edu.utez.mentorias.contollers.user.dto.LoginResponseDTO;
+import mx.edu.utez.mentorias.controllers.user.dto.LoginDTO;
+import mx.edu.utez.mentorias.controllers.user.dto.LoginResponseDTO;
 import mx.edu.utez.mentorias.services.Usuario.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

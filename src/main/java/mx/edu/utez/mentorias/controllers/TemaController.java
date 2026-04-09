@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.controllers;
 
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.services.Tema.TemaService;
@@ -29,9 +29,15 @@ public class TemaController {
         return ResponseEntity.ok(temaService.buscarPorId(id));
     }
 
-    @PostMapping
-    public ResponseEntity<BeanTema> crear(@RequestBody BeanTema tema) {
-        return new ResponseEntity<>(temaService.guardar(tema), HttpStatus.CREATED);
+    @PostMapping("/{mentoriaId}")
+    public ResponseEntity<BeanTema> crear(
+            @PathVariable Long mentoriaId,
+            @RequestBody BeanTema tema) {
+
+        return new ResponseEntity<>(
+                temaService.guardar(mentoriaId, tema),
+                HttpStatus.CREATED
+        );
     }
 
     @DeleteMapping("/{id}")

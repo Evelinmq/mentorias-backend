@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.controllers;
 
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.services.Mentoria.MentoriaService;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mentorias")
+@RequestMapping(value = "/api/mentorias", produces = "application/json")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MentoriaController {
 

@@ -1,6 +1,7 @@
 package mx.edu.utez.mentorias.models.MentoriaUsuario;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,9 +31,10 @@ public class BeanMentoriaUsuario {
     @JoinColumn(name = "usuario_id")
     private BeanUsuario usuario;
 
-    @JsonBackReference
+
     @ManyToOne
     @JoinColumn(name = "mentoria_id")
+    @JsonBackReference(value = "mentoria-alumnos")
     private BeanMentoria mentoria;
 
 }

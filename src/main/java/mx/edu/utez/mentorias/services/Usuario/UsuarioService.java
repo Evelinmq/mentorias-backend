@@ -1,12 +1,11 @@
 package mx.edu.utez.mentorias.services.Usuario;
 
-import mx.edu.utez.mentorias.contollers.user.dto.*;
+import mx.edu.utez.mentorias.controllers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
 import mx.edu.utez.mentorias.models.EstadoUsuario.EstadoUsuarioRepository;
 import mx.edu.utez.mentorias.models.Rol.BeanRol;
 import mx.edu.utez.mentorias.models.Rol.RolRepository;
-import mx.edu.utez.mentorias.models.UsuarioRol.UsuarioRolRepository;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
