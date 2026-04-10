@@ -1,5 +1,6 @@
 package mx.edu.utez.mentorias.contollers;
 
+import mx.edu.utez.mentorias.dto.MentoriaMovilDTO;
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.services.Mentoria.MentoriaService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/mentorias")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MentoriaController {
+
 
     private final MentoriaService mentoriaService;
 
@@ -88,6 +90,53 @@ public class MentoriaController {
         return ResponseEntity.ok(resultados);
     }
 
+    //movil
+    @GetMapping("/movil")
+    public List<MentoriaMovilDTO> listarMovil() {
 
+        return mentoriaService.listar().stream().map((BeanMentoria m) -> {
+            MentoriaMovilDTO dto = new MentoriaMovilDTO();
+
+            dto.setId(m.getId());
+            dto.setFecha(m.getFecha().toString());
+            dto.setHoraInicio(m.getHoraInicio().toString());
+            dto.setHoraFin(m.getHoraFin().toString());
+            dto.setCupo(m.getCupo());
+
+            dto.setEspacio(
+                    m.getEspacio() != null ? m.getEspacio().getNombre() : null
+            );
+
+            dto.setMateria(
+                    m.getMateria() != null ? m.getMateria().getNombre() : null
+            );
+
+            return dto;
+        }).toList();
+    }
+
+    @GetMapping("/movil/mentor/{id}")
+    public List<MentoriaMovilDTO> listarPorMentor(@PathVariable Long id) {
+
+        return mentoriaService.obtenerMentoriasDelMentor(id).stream().map(m -> {
+            MentoriaMovilDTO dto = new MentoriaMovilDTO();
+
+            dto.setId(m.getId());
+            dto.setFecha(m.getFecha().toString());
+            dto.setHoraInicio(m.getHoraInicio().toString());
+            dto.setHoraFin(m.getHoraFin().toString());
+            dto.setCupo(m.getCupo());
+
+            dto.setEspacio(
+                    m.getEspacio() != null ? m.getEspacio().getNombre() : null
+            );
+
+            dto.setMateria(
+                    m.getMateria() != null ? m.getMateria().getNombre() : null
+            );
+
+            return dto;
+        }).toList();
+    }
 
 }

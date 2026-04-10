@@ -55,7 +55,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/usuarios/recuperar-password",
                                 "/api/usuarios/verificar-codigo",
                                 "/api/usuarios/actualizar-password").permitAll()
+                        .requestMatchers("/api/movil/**").permitAll()
                         .anyRequest().authenticated()
+
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

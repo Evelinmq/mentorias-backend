@@ -16,6 +16,7 @@ import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.MentoriaUsuario.BeanMentoriaUsuario;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
 @Setter
@@ -33,23 +34,22 @@ public class BeanMentoria {
     private Integer cuatrimestre;
     private Integer cupo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "espacio_id")
     private BeanEspacio espacio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado_id")
     private BeanEstadoMentoria estado;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     private BeanUsuario mentor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "materia_id")
     private BeanMateria materia;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "mentoria")
     private List<BeanTema> temas;
 
