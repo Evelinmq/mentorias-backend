@@ -23,6 +23,13 @@ public class MentoriaService {
         this.estadoMentoriaRepository = estadoMentoriaRepository;
     }
 
+    // MentoriaService.java
+    @Transactional(readOnly = true)
+    public List<BeanMentoria> listarProximas() {
+        return mentoriaRepository.findMentoriasVigentesYReales(LocalDate.now());
+    }
+
+
     @Transactional
     public BeanMentoria aceptarMentoria(Long id) {
 
@@ -56,9 +63,10 @@ public class MentoriaService {
         return mentoriaRepository.findByMentor(mentorId);
     }
 
+
     @Transactional(readOnly = true)
     public List<BeanMentoria> listarTodas() {
-        return mentoriaRepository.findAll();
+        return mentoriaRepository.findAllWithTemas();//////////
     }
 
     @Transactional(readOnly = true)
@@ -67,8 +75,15 @@ public class MentoriaService {
                 .orElseThrow(() -> new RuntimeException("Mentoría no encontrada con ID: " + id));
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional
     public BeanMentoria guardar(BeanMentoria mentoria) {
+
+        if (mentoria.getTemas() != null) {
+            mentoria.getTemas().forEach(tema -> {
+                tema.setMentoria(mentoria); // 🔥 CLAVE
+            });
+        }
+
         return mentoriaRepository.save(mentoria);
     }
 

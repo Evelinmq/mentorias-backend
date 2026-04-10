@@ -14,12 +14,10 @@ import java.util.List;
 @Service
 public class EstadoMentoriaService {
 
-    private final MentoriaRepository mentoriaRepository;
-    private EstadoMentoriaRepository estadoMentoriaRepository;
+    private final EstadoMentoriaRepository estadoMentoriaRepository;
 
-    public EstadoMentoriaService(EstadoMentoriaRepository estadoMentoriaRepository, MentoriaRepository mentoriaRepository) {
+    public EstadoMentoriaService(EstadoMentoriaRepository estadoMentoriaRepository) {
         this.estadoMentoriaRepository = estadoMentoriaRepository;
-        this.mentoriaRepository = mentoriaRepository;
     }
 
     @Transactional(readOnly = true)

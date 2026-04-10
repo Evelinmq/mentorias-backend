@@ -1,5 +1,7 @@
 package mx.edu.utez.mentorias.services.Tema;
 
+import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
+import mx.edu.utez.mentorias.models.Mentoria.MentoriaRepository;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.Tema.TemaRepository;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,11 @@ public class TemaService {
 
     private TemaRepository temaRepository;
 
-    public TemaService(TemaRepository temaRepository) {
+    private final MentoriaRepository mentoriaRepository;
+
+    public TemaService(TemaRepository temaRepository, MentoriaRepository mentoriaRepository) {
         this.temaRepository = temaRepository;
+        this.mentoriaRepository = mentoriaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -27,8 +32,14 @@ public class TemaService {
                 .orElseThrow(() -> new RuntimeException("Tema no encontrado con ID: " + id));
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
-    public BeanTema guardar(BeanTema tema) {
+    @Transactional
+    public BeanTema guardar(Long mentoriaId, BeanTema tema) {
+
+        BeanMentoria mentoria = mentoriaRepository.findById(mentoriaId)
+                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
+
+        tema.setMentoria(mentoria); // 🔥 AQUÍ VA
+
         return temaRepository.save(tema);
     }
 

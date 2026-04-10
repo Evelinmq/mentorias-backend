@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers.Materia;
+package mx.edu.utez.mentorias.controllers.Materia;
 
 import mx.edu.utez.mentorias.dto.MateriaDTO;
 import mx.edu.utez.mentorias.models.Materia.BeanMateria;

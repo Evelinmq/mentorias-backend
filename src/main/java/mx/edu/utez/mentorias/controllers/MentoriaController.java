@@ -1,4 +1,4 @@
-package mx.edu.utez.mentorias.contollers;
+package mx.edu.utez.mentorias.controllers;
 
 import mx.edu.utez.mentorias.dto.MentoriaMovilDTO;
 import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mentorias")
+@RequestMapping(value = "/api/mentorias", produces = "application/json")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MentoriaController {
 
@@ -46,6 +46,12 @@ public class MentoriaController {
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<BeanMentoria> cancelarMentoria(@PathVariable Long id) {
         return ResponseEntity.ok(mentoriaService.cancelarMentoria(id));
+    }
+
+    @GetMapping("/proximas")
+    public ResponseEntity<List<BeanMentoria>> listarProximas() {
+        // Usamos el método del service que ya tiene el filtro de fecha y nombre
+        return ResponseEntity.ok(mentoriaService.listarProximas());
     }
 
     @PostMapping

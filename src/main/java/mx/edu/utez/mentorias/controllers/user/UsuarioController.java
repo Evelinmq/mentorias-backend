@@ -1,6 +1,6 @@
-package mx.edu.utez.mentorias.contollers.user;
+package mx.edu.utez.mentorias.controllers.user;
 
-import mx.edu.utez.mentorias.contollers.user.dto.*;
+import mx.edu.utez.mentorias.controllers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
 import mx.edu.utez.mentorias.services.Usuario.UsuarioService;

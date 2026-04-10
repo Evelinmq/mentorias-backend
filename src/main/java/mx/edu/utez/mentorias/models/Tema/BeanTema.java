@@ -29,6 +29,6 @@ public class BeanTema {
 
     @ManyToOne
     @JoinColumn(name = "mentoria_id")
-    @JsonBackReference
+    @JsonBackReference(value = "mentoria-temas")
     private BeanMentoria mentoria;
 }

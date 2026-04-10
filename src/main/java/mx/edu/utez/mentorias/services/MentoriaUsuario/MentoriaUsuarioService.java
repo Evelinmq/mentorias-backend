@@ -4,6 +4,10 @@ import mx.edu.utez.mentorias.models.Mentoria.BeanMentoria;
 import mx.edu.utez.mentorias.models.Mentoria.MentoriaRepository;
 import mx.edu.utez.mentorias.models.MentoriaUsuario.BeanMentoriaUsuario;
 import mx.edu.utez.mentorias.models.MentoriaUsuario.MentoriaUsuarioRepository;
+import mx.edu.utez.mentorias.models.Tema.BeanTema;
+import mx.edu.utez.mentorias.models.Tema.TemaRepository;
+import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
+import mx.edu.utez.mentorias.models.usuario.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,12 +16,19 @@ import java.util.List;
 @Service
 public class MentoriaUsuarioService {
 
-    private MentoriaUsuarioRepository mentoriaUsuarioRepository;
-    private MentoriaRepository mentoriaRepository;
+    private final MentoriaUsuarioRepository mentoriaUsuarioRepository;
+    private final MentoriaRepository mentoriaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final TemaRepository temaRepository;
 
-    public MentoriaUsuarioService(MentoriaUsuarioRepository mentoriaUsuarioRepository, MentoriaRepository mentoriaRepository) { // <--- Agrega el segundo parámetro aquí
+    public MentoriaUsuarioService(MentoriaUsuarioRepository mentoriaUsuarioRepository,
+                                  MentoriaRepository mentoriaRepository,
+                                  UsuarioRepository usuarioRepository,
+                                  TemaRepository temaRepository) {
         this.mentoriaUsuarioRepository = mentoriaUsuarioRepository;
         this.mentoriaRepository = mentoriaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.temaRepository = temaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -25,19 +36,16 @@ public class MentoriaUsuarioService {
         return mentoriaUsuarioRepository.findAll();
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public BeanMentoriaUsuario inscribir(BeanMentoriaUsuario inscripcion) {
+    public BeanMentoriaUsuario inscribir(BeanMentoriaUsuario inscripcion, String tema) {
 
-        Long mentoriaId = inscripcion.getMentoria().getId();
+        BeanMentoria mentoria = mentoriaRepository.findById(inscripcion.getMentoria().getId())
+                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
 
-        BeanMentoria mentoria = mentoriaRepository.findById(mentoriaId)
-                .orElseThrow(() -> new RuntimeException("La mentoría no existe"));
-
-        long inscritosActualmente = mentoriaUsuarioRepository.countByMentoriaId(mentoriaId);
-
-        if (inscritosActualmente >= mentoria.getCupo()) {
-            throw new RuntimeException("Lo sentimos, la mentoría '" + mentoria.getMateria().getNombre() +
-                    "' ya ha alcanzado su cupo máximo de " + mentoria.getCupo() + " alumnos.");
+        if (mentoria.getAlumnos() == null || mentoria.getAlumnos().isEmpty()) {
+            BeanTema nuevoTema = new BeanTema();
+            nuevoTema.setNombre(tema);
+            nuevoTema.setMentoria(mentoria);
+            temaRepository.save(nuevoTema);
         }
 
         return mentoriaUsuarioRepository.save(inscripcion);
@@ -49,5 +57,4 @@ public class MentoriaUsuarioService {
         }
         mentoriaUsuarioRepository.deleteById(id);
     }
-
 }

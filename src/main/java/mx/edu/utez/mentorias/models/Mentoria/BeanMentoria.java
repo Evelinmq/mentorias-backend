@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,6 @@ import mx.edu.utez.mentorias.models.Materia.BeanMateria;
 import mx.edu.utez.mentorias.models.MentoriaUsuario.BeanMentoriaUsuario;
 import mx.edu.utez.mentorias.models.Tema.BeanTema;
 import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
 @Setter
@@ -28,31 +28,39 @@ public class BeanMentoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate fecha;
-    private LocalTime horaInicio;
-    private LocalTime horaFin;
     private Integer cuatrimestre;
     private Integer cupo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime horaInicio;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime horaFin;
+
+    @ManyToOne
     @JoinColumn(name = "espacio_id")
     private BeanEspacio espacio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "estado_id")
     private BeanEstadoMentoria estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mentor_id")
     private BeanUsuario mentor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "materia_id")
     private BeanMateria materia;
 
     @OneToMany(mappedBy = "mentoria")
+    @JsonManagedReference(value = "mentoria-temas")
     private List<BeanTema> temas;
 
-    @OneToMany(mappedBy = "mentoria", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mentoria", fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "mentoria-alumnos")
     private List<BeanMentoriaUsuario> alumnos;
 }
