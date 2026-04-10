@@ -129,6 +129,11 @@ public class MentoriaService {
         return mentoriaRepository.filtrarDinamico(inicio, fin, materiaId, mentorId);
     }
 
+    @Transactional(readOnly = true)
+    public List<BeanMentoria> listar() {
+        return mentoriaRepository.findAll();
+    }
+
     public List<BeanMentoria> listarDisponibles() {
         return mentoriaRepository.findAllByCupoLessThan(5);
     }
