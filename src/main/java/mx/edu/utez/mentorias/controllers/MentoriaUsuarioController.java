@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,18 +68,28 @@ public class MentoriaUsuarioController {
                 .stream()
                 .filter(i -> i.getUsuario().getId().equals(usuarioId))
                 .map(i -> i.getMentoria())
+                .filter(m -> {
+                    String estado = m.getEstado().getNombre();
+                    return estado.equals("Aceptada") ||
+                            estado.equals("Por aceptar") ||
+                            estado.equals("Pendiente");
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(mentorias);
     }
- //historial
+
     @GetMapping("/usuario/{usuarioId}/historial")
     public ResponseEntity<List<BeanMentoria>> historialPorUsuario(@PathVariable Long usuarioId) {
         List<BeanMentoria> mentorias = mentoriaUsuarioService.listarInscripciones()
                 .stream()
                 .filter(i -> i.getUsuario().getId().equals(usuarioId))
                 .map(i -> i.getMentoria())
-                // Aquí va el filtro — dime qué condición usar
-                // .filter(m -> m.getFecha().isBefore(LocalDate.now()))
+                .filter(m -> {
+                    String estado = m.getEstado().getNombre();
+                    // Historial = canceladas O fecha ya pasó
+                    return estado.equals("Cancelada") ||
+                            m.getFecha().isBefore(LocalDate.now());
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(mentorias);
     }
