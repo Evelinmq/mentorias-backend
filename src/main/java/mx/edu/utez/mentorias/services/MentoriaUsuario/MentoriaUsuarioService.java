@@ -19,7 +19,7 @@ public class MentoriaUsuarioService {
     private final MentoriaUsuarioRepository mentoriaUsuarioRepository;
     private final MentoriaRepository mentoriaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final TemaRepository temaRepository; // 🔥 IMPORTANTE
+    private final TemaRepository temaRepository;
 
     public MentoriaUsuarioService(MentoriaUsuarioRepository mentoriaUsuarioRepository,
                                   MentoriaRepository mentoriaRepository,
@@ -36,40 +36,18 @@ public class MentoriaUsuarioService {
         return mentoriaUsuarioRepository.findAll();
     }
 
-    // 🔥 MÉTODO CLAVE (CON TEMA)
-    @Transactional(rollbackFor = Exception.class)
-    public BeanMentoriaUsuario inscribir(BeanMentoriaUsuario inscripcion, String temaTexto) {
+    public BeanMentoriaUsuario inscribir(BeanMentoriaUsuario inscripcion, String tema) {
 
-        // 1. Obtener mentoría
-        Long mentoriaId = inscripcion.getMentoria().getId();
-        BeanMentoria mentoria = mentoriaRepository.findById(mentoriaId)
-                .orElseThrow(() -> new RuntimeException("La mentoría no existe"));
+        BeanMentoria mentoria = mentoriaRepository.findById(inscripcion.getMentoria().getId())
+                .orElseThrow(() -> new RuntimeException("Mentoría no encontrada"));
 
-        // 2. Obtener usuario
-        Long usuarioId = inscripcion.getUsuario().getId();
-        BeanUsuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("El usuario no existe"));
-
-        // 3. Validar cupo
-        long inscritos = mentoriaUsuarioRepository.countByMentoriaId(mentoriaId);
-        if (inscritos >= mentoria.getCupo()) {
-            throw new RuntimeException("Cupo lleno");
+        if (mentoria.getAlumnos() == null || mentoria.getAlumnos().isEmpty()) {
+            BeanTema nuevoTema = new BeanTema();
+            nuevoTema.setNombre(tema);
+            nuevoTema.setMentoria(mentoria);
+            temaRepository.save(nuevoTema);
         }
 
-        // 4. Asignar objetos reales
-        inscripcion.setMentoria(mentoria);
-        inscripcion.setUsuario(usuario);
-
-        // 5. 🔥 CREAR TEMA
-        if (temaTexto != null && !temaTexto.trim().isEmpty()) {
-            BeanTema tema = new BeanTema();
-            tema.setNombre(temaTexto);
-            tema.setMentoria(mentoria);
-
-            temaRepository.save(tema);
-        }
-
-        // 6. Guardar inscripción
         return mentoriaUsuarioRepository.save(inscripcion);
     }
 
