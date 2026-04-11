@@ -99,23 +99,21 @@ public class MentoriaController {
     //movil
     @GetMapping("/movil")
     public List<MentoriaMovilDTO> listarMovil() {
-
         return mentoriaService.listar().stream().map((BeanMentoria m) -> {
             MentoriaMovilDTO dto = new MentoriaMovilDTO();
-
             dto.setId(m.getId());
             dto.setFecha(m.getFecha().toString());
             dto.setHoraInicio(m.getHoraInicio().toString());
             dto.setHoraFin(m.getHoraFin().toString());
             dto.setCupo(m.getCupo());
+            dto.setEspacio(m.getEspacio() != null ? m.getEspacio().getNombre() : null);
+            dto.setMateria(m.getMateria() != null ? m.getMateria().getNombre() : null);
 
-            dto.setEspacio(
-                    m.getEspacio() != null ? m.getEspacio().getNombre() : null
-            );
-
-            dto.setMateria(
-                    m.getMateria() != null ? m.getMateria().getNombre() : null
-            );
+            if (m.getMentor() != null) {
+                String nombreCompleto = m.getMentor().getNombre() + " " + m.getMentor().getApellidoP();
+                dto.setMentor(nombreCompleto);
+                dto.setEmail(m.getMentor().getCorreo());
+            }
 
             return dto;
         }).toList();
@@ -141,8 +139,32 @@ public class MentoriaController {
                     m.getMateria() != null ? m.getMateria().getNombre() : null
             );
 
+            if (m.getMentor() != null) {
+                String nombreCompleto = m.getMentor().getNombre() + " " + m.getMentor().getApellidoP();
+                dto.setMentor(nombreCompleto);
+                dto.setEmail(m.getMentor().getCorreo());
+            }
+
             return dto;
         }).toList();
+    }
+
+    @PostMapping("/{id}/agendar")
+    public ResponseEntity<?> agendarMentoria(@PathVariable Long id) {
+        try {
+            BeanMentoria mentoria = mentoriaService.buscarPorId(id);
+            if (mentoria.getCupo() != null && mentoria.getCupo() > 0) {
+                mentoria.setCupo(mentoria.getCupo() - 1);
+                mentoriaService.guardar(mentoria);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Lo sentimos, ya no hay cupo.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al procesar: " + e.getMessage());
+        }
     }
 
 }

@@ -15,4 +15,8 @@ public class MentoriaMovilDTO {
     private Integer cupo;
     private String espacio;
     private String materia;
+    private String mentor;
+    private String email;
+
+
 }
