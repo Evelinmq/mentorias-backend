@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mx.edu.utez.mentorias.models.Espacio.BeanEspacio;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
