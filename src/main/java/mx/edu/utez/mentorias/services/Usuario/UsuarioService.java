@@ -228,10 +228,18 @@ public class UsuarioService {
         // 3. ENVIAR CORREO REAL
         try {
             SimpleMailMessage mensaje = new SimpleMailMessage();
-            mensaje.setFrom("20243ds170@utez.edu.mx");
+            mensaje.setFrom("mentorias.academicas.utez@gmail.com");
             mensaje.setTo(correo);
             mensaje.setSubject("Código de Verificación - Mentorias Académicas");
-            mensaje.setText("Tu código para restablecer la contraseña de tu cuenta es: " + codigo);
+            mensaje.setText(
+                    "Hola,\n\n" +
+                            "Recibimos una solicitud para restablecer la contraseña de tu cuenta en Mentorías Académicas.\n\n" +
+                            "Tu código de verificación es:\n\n" +
+                            codigo + "\n\n" +
+                            "Este código es válido por tiempo limitado. Si no solicitaste este cambio, puedes ignorar este mensaje.\n\n" +
+                            "Saludos,\n" +
+                            "Equipo de Mentorías Académicas"
+            );
 
             mailSender.send(mensaje);
         } catch (Exception e) {
