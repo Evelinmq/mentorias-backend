@@ -69,6 +69,9 @@ public class MentoriaUsuarioController {
                 .filter(i -> i.getUsuario().getId().equals(usuarioId))
                 .map(i -> i.getMentoria())
                 .filter(m -> {
+                    // VALIDACIÓN DE SEGURIDAD:
+                    if (m.getEstado() == null) return false;
+
                     String estado = m.getEstado().getNombre();
                     return estado.equals("Aceptada") ||
                             estado.equals("Por aceptar") ||
@@ -85,8 +88,10 @@ public class MentoriaUsuarioController {
                 .filter(i -> i.getUsuario().getId().equals(usuarioId))
                 .map(i -> i.getMentoria())
                 .filter(m -> {
+                    // VALIDACIÓN DE SEGURIDAD:
+                    if (m.getEstado() == null) return m.getFecha().isBefore(LocalDate.now());
+
                     String estado = m.getEstado().getNombre();
-                    // Historial = canceladas O fecha ya pasó
                     return estado.equals("Cancelada") ||
                             m.getFecha().isBefore(LocalDate.now());
                 })
