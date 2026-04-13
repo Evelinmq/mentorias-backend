@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy; // <--- NUEVO IMPORT
@@ -41,21 +43,21 @@ public class SecurityConfig {
                 //autorizar las rutas y la ifnormación para el Frontend
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/mentorias/**").permitAll()
-                        .requestMatchers("/api/mentorias-usuarios/**").permitAll()
-                        .requestMatchers("/api/carreras/**").permitAll()
-                        .requestMatchers("/api/materias/**").permitAll()
-                        .requestMatchers("/api/edificios/**").permitAll()
-                        .requestMatchers("/api/espacios/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/usuarios/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/usuarios/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/usuarios/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/usuarios/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/reportes/**").permitAll()
+                        .requestMatchers("/api/mentorias/**").hasRole("MENTOR")
+                        .requestMatchers("/api/mentorias-usuarios/**").hasRole("MENTOR")
+                        .requestMatchers(HttpMethod.GET,"/api/carreras/**", "/api/materias/**", "/api/edificios/**",
+                                "/api/espacios/**", "/api/usuarios/**").hasRole("MENTOR")
+                        .requestMatchers("/api/carreras/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/materias/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/edificios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/espacios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.POST,"/api/usuarios").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/reportes/**").authenticated()
                         .requestMatchers("/api/usuarios/recuperar-password",
                                 "/api/usuarios/verificar-codigo",
                                 "/api/usuarios/actualizar-password").permitAll()
-                        .requestMatchers("/api/movil/**").permitAll()
                         .anyRequest().authenticated()
 
                 )
@@ -75,5 +77,15 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy(){
+        return RoleHierarchyImpl.withDefaultRolePrefix()
+                .role("ADMINISTRADOR")
+                .implies("MENTOR", "APRENDIZ")
+                .role("MENTOR")
+                .implies("APRENDIZ")
+                .build();
     }
 }

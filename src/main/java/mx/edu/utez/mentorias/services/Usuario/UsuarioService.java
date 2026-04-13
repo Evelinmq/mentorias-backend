@@ -1,5 +1,7 @@
 package mx.edu.utez.mentorias.services.Usuario;
 
+import mx.edu.utez.mentorias.config.JwtService;
+import mx.edu.utez.mentorias.config.JwtUtil;
 import mx.edu.utez.mentorias.controllers.user.dto.*;
 import mx.edu.utez.mentorias.mappers.UserMapper;
 import mx.edu.utez.mentorias.models.EstadoUsuario.BeanEstadoUsuario;
@@ -24,6 +26,9 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioService {
 
+    private final JwtService jwtService;
+    private final JwtUtil jwtUtil;
+
     @Autowired
     private final UsuarioRepository usuarioRepository;
     private final UserMapper userMapper;
@@ -33,13 +38,16 @@ public class UsuarioService {
     private final JavaMailSender mailSender;
     private static final Map<String, String> codigosTemporales = new HashMap<>();
 
+
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             UserMapper userMapper,
             PasswordEncoder passwordEncoder,
             EstadoUsuarioRepository estadoUsuarioRepository,
             RolRepository rolRepository,
-            JavaMailSender mailSender //Si sale error en esta linea por alguna razón ignorenlo, en realidad si sirve
+            JavaMailSender mailSender, //Si sale error en esta linea por alguna razón ignorenlo, en realidad si sirve
+            JwtService jwtService,
+            JwtUtil jwtUtil
     ) {
         this.usuarioRepository = usuarioRepository;
         this.userMapper = userMapper;
@@ -47,6 +55,8 @@ public class UsuarioService {
         this.estadoUsuarioRepository = estadoUsuarioRepository;
         this.rolRepository = rolRepository;
         this.mailSender = mailSender;
+        this.jwtService = jwtService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -182,12 +192,15 @@ public class UsuarioService {
                     .collect(Collectors.joining(","));
         }
 
+        String token = jwtService.generateToken(usuario);
+
         // 6. Construir el DTO que pide el constructor (Long, String, String, String)
         return new LoginResponseDTO(
                 usuario.getId(),
                 usuario.getNombre() + " " + usuario.getApellidoP() + " " + usuario.getApellidoM(),
                 usuario.getCorreo(),
-                nombreRol.toLowerCase()
+                nombreRol.toLowerCase(),
+                token
         );
     }
 

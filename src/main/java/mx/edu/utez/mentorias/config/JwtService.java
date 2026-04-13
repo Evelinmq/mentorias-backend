@@ -1,0 +1,30 @@
+package mx.edu.utez.mentorias.config;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import mx.edu.utez.mentorias.models.usuario.BeanUsuario;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class JwtService {
+    private final String SECRET_KEY = "TuClaveSecretaSuperSeguraQueNadieDebeSaber";
+
+    public String generateToken(BeanUsuario usuario) {
+        List<String> roles = usuario.getRoles().stream()
+                .map(rol -> rol.getNombre().toUpperCase())
+                .collect(Collectors.toList());
+
+        return Jwts.builder()
+                .setSubject(usuario.getCorreo())
+                .claim("roles", roles)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+                .signWith(SignatureAlgorithm.HS256,  SECRET_KEY)
+                .compact();
+    }
+}
