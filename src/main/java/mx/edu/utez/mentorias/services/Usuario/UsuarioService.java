@@ -166,7 +166,7 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public LoginResponseDTO login(LoginDTO loginDTO) {
+    public LoginResponseDTO  login(LoginDTO loginDTO) {
         // 3. Buscar por correo usando tu BeanUsuario
         BeanUsuario usuario = usuarioRepository.findByCorreo(loginDTO.getCorreo())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

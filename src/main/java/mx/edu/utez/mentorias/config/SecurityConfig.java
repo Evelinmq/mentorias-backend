@@ -1,6 +1,8 @@
 package mx.edu.utez.mentorias.config;
 
+import jakarta.websocket.Endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,27 +41,24 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                //autorizar las rutas y la ifnormación para el Frontend
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/mentorias/**").hasRole("MENTOR")
-                        .requestMatchers("/api/mentorias-usuarios/**").hasRole("MENTOR")
-                        .requestMatchers(HttpMethod.GET,"/api/carreras/**", "/api/materias/**", "/api/edificios/**",
-                                "/api/espacios/**", "/api/usuarios/**").hasRole("MENTOR")
-                        .requestMatchers("/api/carreras/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/materias/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/edificios/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/espacios/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.POST,"/api/usuarios").authenticated()
-                        .requestMatchers(HttpMethod.DELETE,"/api/usuarios/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT,"/api/usuarios/**").authenticated()
-                        .requestMatchers(HttpMethod.GET,"/api/reportes/**").authenticated()
-                        .requestMatchers("/api/usuarios/recuperar-password",
-                                "/api/usuarios/verificar-codigo",
-                                "/api/usuarios/actualizar-password").permitAll()
-                        .anyRequest().authenticated()
+                        // 1. Rutas públicas (Login debe ir primero o muy arriba)
+                        .requestMatchers("/api/auth/**", "/api/usuarios/login").permitAll()
+                        .requestMatchers("/api-docs/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/usuarios/recuperar-password", "/api/usuarios/verificar-codigo", "/api/usuarios/actualizar-password").permitAll()
 
+                        // 2. Reglas por roles
+                        .requestMatchers("/api/mentorias/**", "/api/mentorias-usuarios/**").hasAnyRole("MENTOR", "ADMINISTRADOR", "APRENDIZ")
+                        .requestMatchers(HttpMethod.GET, "/api/carreras/**", "/api/materias/**", "/api/edificios/**", "/api/espacios/**", "/api/usuarios/**").hasAnyRole("MENTOR", "ADMINISTRADOR", "APRENDIZ")
+                        .requestMatchers("/api/carreras/**", "/api/materias/**", "/api/edificios/**", "/api/espacios/**").hasRole("ADMINISTRADOR")
+
+                        // 3. Rutas autenticadas
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reportes/**").authenticated()
+
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -80,12 +79,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public RoleHierarchy roleHierarchy(){
-        return RoleHierarchyImpl.withDefaultRolePrefix()
-                .role("ADMINISTRADOR")
-                .implies("MENTOR", "APRENDIZ")
-                .role("MENTOR")
-                .implies("APRENDIZ")
+    public RoleHierarchy roleHierarchy() {
+        return RoleHierarchyImpl.withRolePrefix("ROLE_") // Importante si usas hasRole
+                .role("ADMINISTRADOR").implies("MENTOR")
+                .role("MENTOR").implies("APRENDIZ")
                 .build();
     }
 }
