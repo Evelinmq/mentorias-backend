@@ -78,9 +78,15 @@ public class MentoriaService {
     @Transactional
     public BeanMentoria guardar(BeanMentoria mentoria) {
 
+        if (mentoria.getEstado() == null) {
+            BeanEstadoMentoria estadoPorAceptar = estadoMentoriaRepository.findById(3L)
+                    .orElseThrow(() -> new RuntimeException("Estado 'Por aceptar' no encontrado"));
+            mentoria.setEstado(estadoPorAceptar);
+        }
+
         if (mentoria.getTemas() != null) {
             mentoria.getTemas().forEach(tema -> {
-                tema.setMentoria(mentoria); // 🔥 CLAVE
+                tema.setMentoria(mentoria);
             });
         }
 
@@ -137,5 +143,7 @@ public class MentoriaService {
     public List<BeanMentoria> listarDisponibles() {
         return mentoriaRepository.findAllByCupoLessThan(5);
     }
+
+
 
 }

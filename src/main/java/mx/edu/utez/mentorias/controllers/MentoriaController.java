@@ -99,11 +99,7 @@ public class MentoriaController {
     //movil
     @GetMapping("/movil")
     public List<MentoriaMovilDTO> listarMovil() {
-        return mentoriaService.listar().stream()
-                .filter(m -> m.getEstado() != null &&
-                        (m.getEstado().getNombre().equals("Aceptada") ||
-                                m.getEstado().getNombre().equals("Por aceptar") ||
-                                m.getEstado().getNombre().equals("Pendiente")))
+        return mentoriaService.listar().stream()  // ← mismo método que usa la web
                 .map((BeanMentoria m) -> {
                     MentoriaMovilDTO dto = new MentoriaMovilDTO();
                     dto.setId(m.getId());
@@ -113,13 +109,11 @@ public class MentoriaController {
                     dto.setCupo(m.getCupo());
                     dto.setEspacio(m.getEspacio() != null ? m.getEspacio().getNombre() : null);
                     dto.setMateria(m.getMateria() != null ? m.getMateria().getNombre() : null);
-
                     if (m.getMentor() != null) {
                         String nombreCompleto = m.getMentor().getNombre() + " " + m.getMentor().getApellidoP();
                         dto.setMentor(nombreCompleto);
                         dto.setEmail(m.getMentor().getCorreo());
                     }
-
                     return dto;
                 }).toList();
     }
