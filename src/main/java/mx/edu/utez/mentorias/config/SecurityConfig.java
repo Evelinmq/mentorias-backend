@@ -53,10 +53,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/carreras/**", "/api/materias/**", "/api/edificios/**", "/api/espacios/**").hasRole("ADMINISTRADOR")
 
                         // 3. Rutas autenticadas
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/reportes/**").hasRole("ADMINISTRADOR")
+
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios/cambiar-estado").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/reportes/**").authenticated()
 
                         .anyRequest().authenticated()
                 )
