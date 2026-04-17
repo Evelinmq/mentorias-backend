@@ -134,6 +134,7 @@ public class MentoriaController {
             dto.setHoraInicio(m.getHoraInicio().toString());
             dto.setHoraFin(m.getHoraFin().toString());
             dto.setCupo(m.getCupo());
+            dto.setEstado(m.getEstado());
             if (m.getTemas() != null && !m.getTemas().isEmpty()) {
 
                 dto.setTema(m.getTemas().get(0).getNombre());

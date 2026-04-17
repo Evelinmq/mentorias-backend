@@ -19,6 +19,7 @@ public class MentoriaMovilDTO {
     private String email;
     private String tema;
     private java.util.List<Object> alumnos;
+    private mx.edu.utez.mentorias.models.EstadoMentoria.BeanEstadoMentoria estado;
 
 
 }
