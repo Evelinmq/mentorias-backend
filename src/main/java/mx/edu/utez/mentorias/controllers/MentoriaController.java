@@ -107,6 +107,11 @@ public class MentoriaController {
                     dto.setHoraInicio(m.getHoraInicio().toString());
                     dto.setHoraFin(m.getHoraFin().toString());
                     dto.setCupo(m.getCupo());
+                    if (m.getTemas() != null && !m.getTemas().isEmpty()) {
+                        dto.setTema(m.getTemas().get(0).getNombre());
+                    } else {
+                        dto.setTema("Sin tema");
+                    }
                     dto.setEspacio(m.getEspacio() != null ? m.getEspacio().getNombre() : null);
                     dto.setMateria(m.getMateria() != null ? m.getMateria().getNombre() : null);
                     if (m.getMentor() != null) {
@@ -129,7 +134,12 @@ public class MentoriaController {
             dto.setHoraInicio(m.getHoraInicio().toString());
             dto.setHoraFin(m.getHoraFin().toString());
             dto.setCupo(m.getCupo());
+            if (m.getTemas() != null && !m.getTemas().isEmpty()) {
 
+                dto.setTema(m.getTemas().get(0).getNombre());
+            } else {
+                dto.setTema("Sin tema");
+            }
             dto.setEspacio(
                     m.getEspacio() != null ? m.getEspacio().getNombre() : null
             );

@@ -17,6 +17,8 @@ public class MentoriaMovilDTO {
     private String materia;
     private String mentor;
     private String email;
+    private String tema;
+    private java.util.List<Object> alumnos;
 
 
 }
